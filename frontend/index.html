@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flight Booking</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>✈️ Flight Booking System</h1>
+
+    <!-- 🔍 Search Flights -->
+    <section id="search-section">
+      <h2>Search Flights</h2>
+      <form id="search-form">
+        <label>
+            From:
+            <input type="text" name="from" placeholder="e.g. Accra" required autocomplete="off" />
+        </label>
+        <label>
+            To:
+            <input type="text" name="to" placeholder="e.g. Kumasi" required autocomplete="off" />
+        </label>
+        <label>
+            Departure Date:
+            <input type="date" name="date" required autocomplete="off" />
+        </label>
+        <label>
+            Class:
+            <select name="class" required autocomplete="off">
+            <option value="economy">Economy</option>
+            <option value="business">Business</option>
+            <option value="first">First Class</option>
+            </select>
+        </label>
+        <button type="submit">Find Flights</button>
+        </form>
+    </section>
+
+    <!-- 📋 Results -->
+    <section id="results-section" class="hidden">
+      <h2>Available Flights</h2>
+      <div id="loader" class="hidden">Searching for flights</div>
+      <div id="error-message" class="hidden" role="alert"></div>
+      <div id="flight-results"></div>
+      <button id="proceed-btn" disabled>Proceed to Booking</button>
+    </section>
+
+    <!-- 🧍 Passenger Booking -->
+    <section id="booking-section" class="hidden">
+      <h2>Enter Passenger Details</h2>
+      <form id="booking-form">
+        <label>
+            Full Name:
+            <input type="text" name="name" placeholder="Your full name" required autocomplete="name" />
+        </label>
+        <label>
+            Email:
+            <input type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+        </label>
+        <label>
+            Phone:
+            <input type="tel" name="phone" placeholder="+233..." required autocomplete="tel" />
+        </label>
+        <button type="submit">Confirm Booking</button>
+        </form>
+    </section>
+
+    <!-- ✅ Confirmation -->
+    <section id="confirmation-section" class="hidden">
+      <h2>Booking Confirmation</h2>
+      <div id="confirmation-details"></div>
+    </section>
+  </main>
+
+<script src="script.js"></script>
+</body>
+</html>
