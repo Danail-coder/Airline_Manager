@@ -97,3 +97,51 @@ button:hover {
 /* Small layout tweaks */
 #flight-results { margin-top: 12px; }
 #results-section { margin-top: 20px; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .container {
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  form { gap: 8px; }
+
+  input, select, button { width: 100%; box-sizing: border-box; }
+
+  .flight-card { padding: 12px; }
+
+  /* Make flight-info items stack on small screens */
+  .flight-info { display: flex; flex-direction: column; gap: 6px; }
+
+  /* Hide debug overlay on small screens (so it doesn't block the UI) */
+  #debug-box { display: none !important; }
+}
+
+@media (min-width: 601px) {
+  /* On larger screens show flight-info in a row */
+  .flight-info { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+}
+
+/* Loader spinner (enhanced) */
+#loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+#loader:before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0,0,0,0.1);
+  border-top-color: #007bff;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
