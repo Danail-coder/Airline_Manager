@@ -59,102 +59,43 @@ function init() {
   const confirmationDetails = document.getElementById('confirmation-details');
   const loader = document.getElementById('loader');
   const errorMessage = document.getElementById('error-message');
+  const useMockCheckbox = document.getElementById('use-mock-checkbox');
+  const networkBanner = document.createElement('div');
+  networkBanner.id = 'network-banner';
+  networkBanner.textContent = 'Backend unreachable — showing cached/mock flights';
+  document.body.appendChild(networkBanner);
 
-  if (!searchForm) { console.error('Missing #search-form — aborting init'); return; }
-  if (!flightResults) { console.error('Missing #flight-results — aborting init'); return; }
+  // If a previous run captured traces (e.g., page reloaded and console cleared), show them now
+    // No persisted debug traces in production-run; start clean.
+
+        // simple SPA page and breadcrumb wiring
+        const pages = Array.from(document.querySelectorAll('.page'));
+        const crumbs = {
+          search: document.getElementById('crumb-search'),
+          results: document.getElementById('crumb-results'),
+          booking: document.getElementById('crumb-booking'),
+          confirmation: document.getElementById('crumb-confirmation')
+        };
+
+        if (!searchForm) { console.error('Missing #search-form — aborting init'); return; }
+        if (!flightResults) { console.error('Missing #flight-results — aborting init'); return; }
 
   let selectedFlight = null;
-  // Persistent debug overlay (scrollable, copyable)
-  const debugBox = document.createElement('div');
-  debugBox.id = 'debug-box';
-  debugBox.style.position = 'fixed';
-  debugBox.style.right = '12px';
-  debugBox.style.bottom = '12px';
-  debugBox.style.width = '360px';
-  debugBox.style.maxHeight = '40vh';
-  debugBox.style.overflow = 'auto';
-  debugBox.style.background = 'rgba(0,0,0,0.85)';
-  debugBox.style.color = 'white';
-  debugBox.style.padding = '8px';
-  debugBox.style.borderRadius = '6px';
-  debugBox.style.fontSize = '11px';
-  debugBox.style.fontFamily = 'monospace';
-  debugBox.style.whiteSpace = 'pre-wrap';
-  debugBox.style.zIndex = 9999;
-  // header + copy button
-  const dbgHeader = document.createElement('div');
-  dbgHeader.style.display = 'flex';
-  dbgHeader.style.justifyContent = 'space-between';
-  dbgHeader.style.alignItems = 'center';
-  const hdrText = document.createElement('div');
-  hdrText.textContent = 'debug log';
-  hdrText.style.fontWeight = '600';
-  const copyBtn = document.createElement('button');
-  copyBtn.textContent = 'Copy';
-  copyBtn.style.marginLeft = '8px';
-  copyBtn.style.fontSize = '11px';
-  copyBtn.onclick = async () => {
-    try {
-      await navigator.clipboard.writeText(logContainer.innerText);
-      copyBtn.textContent = 'Copied';
-      setTimeout(() => copyBtn.textContent = 'Copy', 1500);
-    } catch (err) {
-      console.error('copy failed', err);
-    }
-  };
-  dbgHeader.appendChild(hdrText);
-  dbgHeader.appendChild(copyBtn);
-  debugBox.appendChild(dbgHeader);
-  // log container
-  const logContainer = document.createElement('div');
-  logContainer.id = 'debug-log';
-  logContainer.style.marginTop = '6px';
-  debugBox.appendChild(logContainer);
-  document.body.appendChild(debugBox);
-
+  // Lightweight debug logger to DevTools console (no UI overlay)
   function appendDebug(msg) {
     const ts = new Date().toISOString();
-    logContainer.innerText = `${ts} - ${msg}\n\n` + logContainer.innerText;
+    console.debug(`${ts} - ${msg}`);
   }
 
-  // Observe class changes on resultsSection so we can tell what toggles .hidden
-  if (resultsSection) {
-    const mo = new MutationObserver((list) => {
-      for (const mut of list) {
-        if (mut.attributeName === 'class') {
-          appendDebug(`results.class='${resultsSection.className}'`);
-          console.log('debug: results.class changed ->', resultsSection.className);
-        }
-      }
-    });
-    mo.observe(resultsSection, { attributes: true, attributeFilter: ['class'] });
-  }
+  // Targeted tracing: instrument resultsSection.classList.add to capture a stack trace
+    // Normal runtime: no instrumentation.
 
-  // Extra: monkey-patch classList.add/remove for this element to trace callers that toggle 'hidden'
-  if (resultsSection && resultsSection.classList) {
-    const originalAdd = resultsSection.classList.add.bind(resultsSection.classList);
-    const originalRemove = resultsSection.classList.remove.bind(resultsSection.classList);
-    resultsSection.classList.add = function(...args) {
-      if (args.includes('hidden')) {
-        const stack = (new Error()).stack;
-        appendDebug('classList.add("hidden") called on #results-section\n' + stack);
-        console.warn('debug: classList.add("hidden") called on #results-section');
-        console.trace();
-      }
-      return originalAdd(...args);
-    };
-    resultsSection.classList.remove = function(...args) {
-      if (args.includes('hidden')) {
-        const stack = (new Error()).stack;
-        appendDebug('classList.remove("hidden") called on #results-section\n' + stack);
-        console.warn('debug: classList.remove("hidden") called on #results-section');
-        console.trace();
-      }
-      return originalRemove(...args);
-    };
-  }
+  // Toggle to enable mock flights for development/testing
+  // For smooth backend-driven flow, default to false. Set to true only for offline testing.
+  const USE_MOCK_FALLBACK = false;
 
   function displayFlights(flights) {
+    console.log('[flight-ui] displayFlights called; flights.length=', flights && flights.length);
     flightResults.innerHTML = '';
     if (!flights || flights.length === 0) {
       flightResults.innerHTML = '<p>No flights found for your search.</p>';
@@ -175,6 +116,17 @@ function init() {
       div.addEventListener('click', () => selectFlight(div, flight));
       flightResults.appendChild(div);
     });
+    // Make sure results section is visible when flights are displayed
+    if (resultsSection) {
+      resultsSection.classList.remove('hidden');
+    console.log('[flight-ui] results-section visible');
+      // navigate to results view
+      try { navigateTo('/results'); } catch (e) { /* navigateTo may be defined later */ }
+
+      // Short-lived guard: if some other code immediately re-adds 'hidden', remove it.
+      // This observer disconnects itself after 1000ms to avoid permanent interception.
+        // No guard observer needed.
+    }
   }
 
   function selectFlight(element, flight) {
@@ -187,44 +139,93 @@ function init() {
   if (proceedBtn) {
     proceedBtn.addEventListener('click', () => {
       if (selectedFlight && bookingSection) {
-        bookingSection.classList.remove('hidden');
+        // navigate to booking page
+        navigateTo('/booking');
+        bookingSection.querySelector('input, textarea, select')?.focus();
         window.scrollTo({ top: bookingSection.offsetTop, behavior: 'smooth' });
       }
     });
   }
 
-  searchForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation(); // prevent other handlers from also running
-    debugBox.textContent = 'debug: submit fired';
-    console.log('[flight-ui] search submit handler fired');
-    console.log('[flight-ui] search submit handler fired');
+  // back buttons/new search
+  const backToSearch = document.getElementById('back-to-search');
+  const backToSearch2 = document.getElementById('back-to-search-2');
+  if (backToSearch) backToSearch.addEventListener('click', () => navigateTo('/'));
+  if (backToSearch2) backToSearch2.addEventListener('click', () => {
+    if (bookingForm) bookingForm.reset();
+    if (confirmationDetails) confirmationDetails.innerHTML = '';
+    navigateTo('/');
+  });
+
+  // Centralized search handler (called from click or submit if needed)
+  async function handleSearch() {
+    console.log('[flight-ui] handleSearch fired');
     const formData = new FormData(searchForm);
     const searchParams = Object.fromEntries(formData.entries());
-
+    const findFlightsBtnEl = document.getElementById('find-flights-btn');
     selectedFlight = null;
     if (proceedBtn) proceedBtn.disabled = true;
     if (bookingSection) bookingSection.classList.add('hidden');
     if (confirmationSection) confirmationSection.classList.add('hidden');
 
-    if (errorMessage) errorMessage.classList.add('hidden');
-    if (loader) loader.classList.remove('hidden');
+    if (errorMessage) { errorMessage.classList.add('hidden'); errorMessage.textContent = ''; }
+    if (loader) { loader.classList.remove('hidden'); loader.textContent = 'Searching flights...'; }
+    if (findFlightsBtnEl) findFlightsBtnEl.disabled = true;
+
+    // If the user checked 'Use mock data', short-circuit to local mock results immediately
+    if (useMockCheckbox && useMockCheckbox.checked) {
+      const fallback = mockFlights(searchParams);
+      displayFlights(fallback);
+      if (loader) loader.classList.add('hidden');
+      if (findFlightsBtnEl) findFlightsBtnEl.disabled = false;
+      // hide banner if shown
+      networkBanner.style.display = 'none';
+      return;
+    }
 
     try {
       const flights = await searchFlights(searchParams);
+  // hide network banner if previously shown
+  networkBanner.style.display = 'none';
+  console.log('[flight-ui] flights fetched, showing results');
       displayFlights(flights);
-      if (resultsSection) resultsSection.classList.remove('hidden');
       if (loader) loader.classList.add('hidden');
+      if (findFlightsBtnEl) findFlightsBtnEl.disabled = false;
     } catch (err) {
-      if (loader) loader.classList.add('hidden');
+      // On network error, show banner and surface the error. Optionally use mock fallback
+      appendDebug('search failed: ' + (err && err.message));
+      networkBanner.style.display = 'block';
+  if (loader) loader.classList.add('hidden');
+  if (findFlightsBtnEl) findFlightsBtnEl.disabled = false;
       if (errorMessage) {
-        errorMessage.textContent = err.message || 'Failed to fetch flights';
+        // handle both Error objects and fetch response text
+        let text = (err && err.message) || 'Failed to fetch flights';
+        errorMessage.textContent = text;
         errorMessage.classList.remove('hidden');
       }
-      const fallback = mockFlights(searchParams);
-      displayFlights(fallback);
-      if (resultsSection) resultsSection.classList.remove('hidden');
+      if (USE_MOCK_FALLBACK || (useMockCheckbox && useMockCheckbox.checked)) {
+        const fallback = mockFlights(searchParams);
+        displayFlights(fallback);
+        if (findFlightsBtnEl) findFlightsBtnEl.disabled = false;
+      }
     }
+  }
+
+  // Bind click on the explicit Find Flights button to avoid native form submission and reloads
+  const findFlightsBtn = document.getElementById('find-flights-btn');
+  if (findFlightsBtn) {
+    findFlightsBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleSearch();
+    });
+  }
+
+  // Also intercept form submit (e.g., Enter key) and run the same safe handler
+  // This prevents the browser from performing a native form submit/reload.
+  searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    handleSearch();
   });
 
   if (bookingForm) {
@@ -234,19 +235,79 @@ function init() {
       const formData = new FormData(bookingForm);
       const passengerDetails = Object.fromEntries(formData.entries());
       try {
-        const bookingResponse = await bookFlight(selectedFlight, passengerDetails);
-        if (confirmationDetails) confirmationDetails.innerHTML = `Booking confirmed`;
-        if (confirmationSection) confirmationSection.classList.remove('hidden');
+        // disable submit while processing
+        const submitBtn = bookingForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        if (loader) { loader.classList.remove('hidden'); loader.textContent = 'Confirming booking...'; }
+        // If mock mode is enabled, return a simulated booking response instead of calling the backend
+        let bookingResponse;
+        if (useMockCheckbox && useMockCheckbox.checked) {
+          bookingResponse = {
+            bookingReference: 'MOCK-' + Math.random().toString(36).slice(2,9).toUpperCase(),
+            ticketNumber: 'TCK' + Math.floor(100000 + Math.random() * 900000),
+            status: 'confirmed',
+            flight: selectedFlight,
+            passenger: passengerDetails,
+            amount: selectedFlight?.price || 0,
+            issuedAt: new Date().toISOString()
+          };
+          // small artificial delay to make UX feel natural
+          await new Promise(r => setTimeout(r, 400));
+        } else {
+          bookingResponse = await bookFlight(selectedFlight, passengerDetails);
+        }
+        if (confirmationDetails) confirmationDetails.innerHTML = `Booking confirmed<br><pre>${JSON.stringify(bookingResponse, null, 2)}</pre>`;
+        // navigate to confirmation page
+        navigateTo('/confirmation');
+        // hide booking form content
+        if (bookingSection) bookingSection.classList.add('hidden');
+        // hide network banner if it was visible
+        networkBanner.style.display = 'none';
+        if (loader) loader.classList.add('hidden');
+        if (submitBtn) submitBtn.disabled = false;
       } catch (err) {
+        appendDebug('booking failed: ' + (err && err.message));
+        // Surface booking errors to the user (no simulation)
         if (errorMessage) {
           errorMessage.textContent = err.message || 'Booking failed';
           errorMessage.classList.remove('hidden');
+          if (loader) loader.classList.add('hidden');
+          const submitBtn = bookingForm.querySelector('button[type="submit"]');
+          if (submitBtn) submitBtn.disabled = false;
         } else {
           alert(err.message || 'Booking failed');
         }
       }
     });
   }
+
+  // Basic SPA navigation helper functions
+  function setActiveCrumb(route) {
+    Object.values(crumbs).forEach(c => c?.classList.remove('active'));
+    if (route === '/') crumbs.search?.classList.add('active');
+    if (route === '/results') crumbs.results?.classList.add('active');
+    if (route === '/booking') crumbs.booking?.classList.add('active');
+    if (route === '/confirmation') crumbs.confirmation?.classList.add('active');
+  }
+
+  function navigateTo(route) {
+    pages.forEach(p => p.classList.remove('active'));
+    const target = pages.find(p => p.dataset.route === route) || pages[0];
+    if (target) target.classList.add('active');
+    setActiveCrumb(route);
+    try { history.pushState({ route }, '', route === '/' ? '/' : route); } catch (e) { /* ignore */ }
+  }
+
+  window.addEventListener('popstate', (ev) => {
+    const route = ev.state?.route || '/';
+    pages.forEach(p => p.classList.remove('active'));
+    const target = pages.find(p => p.dataset.route === route) || pages[0];
+    target.classList.add('active');
+    setActiveCrumb(route);
+  });
+
+  // initialize route
+  navigateTo('/');
 }
 
 if (document.readyState === 'loading') {
