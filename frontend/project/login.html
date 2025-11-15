@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Skylink Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Takeoff animation overlay */
+    #takeoff-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to top, #87ceeb, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #takeoff-screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .plane-icon {
+      width: 120px;
+      animation: takeoff 3.5s ease-in-out forwards;
+    }
+
+    @keyframes takeoff {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
+      100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
+    }
+
+    .runway {
+      width: 80%;
+      height: 8px;
+      background: repeating-linear-gradient(90deg, #333 0 20px, #666 20px 40px);
+      border-radius: 4px;
+      margin-top: 20px;
+      animation: zoomRunway 3.5s ease-in-out forwards;
+    }
+
+    @keyframes zoomRunway {
+      from { transform: scaleX(1); opacity: 1; }
+      to { transform: scaleX(2); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-sky-200 to-blue-400 h-screen flex items-center justify-center">
+
+  <!-- Login Box -->
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
+    <h1 class="text-3xl font-bold text-blue-700 mb-6">Sign In</h1>
+
+    <form id="login-form" class="space-y-4">
+      <input type="email" id="email" placeholder="Email" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      <input type="password" id="password" placeholder="Password" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+
+      <div class="flex justify-between mt-4 text-sm text-gray-600">
+        <label><input type="radio" name="role" value="admin" required> Admin</label>
+        <label><input type="radio" name="role" value="client"> Client</label>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-all">
+        Login
+      </button>
+    </form>
+
+    <p id="error-message" class="text-red-500 mt-4 hidden">Invalid credentials.</p>
+  </div>
+
+  <!-- ✈️ Takeoff Animation Overlay -->
+  <div id="takeoff-screen">
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
+    <div class="runway"></div>
+    <p class="mt-6 text-lg font-semibold text-gray-700">Taking off... please wait</p>
+  </div>
+
+    <script src="../js/login.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings | Skylink Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-sky-100 to-blue-50 min-h-screen">
+
+  <!-- Navbar -->
+  <header class="bg-white shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-blue-700">⚙️ Settings</h1>
+    <nav>
+      <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
+      <a href="flights.html" class="hover:bg-blue-700 p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
+      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
+      <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+    </nav>
+  </header>
+
+  <!-- decorative animated sky (SVG) -->
+    <div class="sky" aria-hidden="true">
+      <!-- inline SVG with simple plane and cloud animations -->
+      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#eaf3ff" />
+            <stop offset="100%" stop-color="#d6eaff" />
+          </linearGradient>
+          <g id="plane">
+            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
+            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
+          </g>
+        </defs>
+
+        <!-- moving clouds -->
+        <g class="clouds" fill="#ffffff" opacity="0.9">
+          <ellipse cx="1200" cy="40" rx="90" ry="22" />
+          <ellipse cx="1000" cy="70" rx="60" ry="18" />
+          <ellipse cx="850" cy="35" rx="70" ry="20" />
+          <ellipse cx="600" cy="60" rx="110" ry="26" />
+        </g>
+
+        <!-- repeated planes with different speeds -->
+        <use href="#plane" class="plane plane-1" x="-260" y="40" />
+        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
+        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
+      </svg>
+    </div>
+
+
+  <!-- Settings Content -->
+  <main class="p-6 max-w-3xl mx-auto">
+    <div class="bg-white rounded-xl shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700">General Settings</h2>
+
+      <form id="settings-form" class="space-y-5">
+        <div>
+          <label class="block text-gray-600">Airline Name</label>
+          <input type="text" id="airlineName" class="w-full p-3 border rounded-md" placeholder="e.g. SkyJet Airlines" />
+        </div>
+
+        <div>
+          <label class="block text-gray-600">Theme Color</label>
+          <select id="themeColor" class="w-full p-3 border rounded-md">
+            <option value="blue">Blue</option>
+            <option value="sky">Sky</option>
+            <option value="indigo">Indigo</option>
+            <option value="emerald">Emerald</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-gray-600">Timezone</label>
+          <select id="timezone" class="w-full p-3 border rounded-md">
+            <option value="GMT">GMT</option>
+            <option value="UTC">UTC</option>
+            <option value="WAT">West Africa Time</option>
+            <option value="EST">Eastern Time</option>
+          </select>
+        </div>
+
+        <button type="submit"
+                class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-all">
+          Save Settings
+        </button>
+      </form>
+    </div>
+
+    <!-- Confirmation -->
+    <p id="statusMessage" class="text-green-600 mt-6 hidden">✅ Settings updated successfully!</p>
+  </main>
+
+  <script src="js/settings.js"></script>
+</body>
+</html>

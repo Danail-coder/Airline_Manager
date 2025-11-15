@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AeroConnect | Search Flights</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-b from-blue-50 to-blue-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-lg">
+    <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">Search Flights</h1>
+    <nav class="space-x-4 text-sm">
+        <a href="search.html" class="hover:underline">Search</a>
+        <a href="results.html" class="hover:underline">Results</a>
+        <a href="booking.html" class="hover:underline">Booking</a>
+        <a href="user-payment.html" class="underline font-semibold">Payment</a>
+        <a href="confirmation.html" class="hover:underline">Confirmation</a>
+        <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+        </nav>
+
+    <form id="search-form" class="space-y-4">
+      <div>
+        <label class="block font-medium text-gray-700">From</label>
+        <input id="from" type="text" placeholder="e.g. Accra" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">To</label>
+        <input id="to" type="text" placeholder="e.g. London" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Departure Date</label>
+        <input id="date" type="date" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Class</label>
+        <select id="class" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+          <option value="Economy">Economy</option>
+          <option value="Business">Business</option>
+          <option value="First Class">First Class</option>
+        </select>
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Search Flights
+      </button>
+    </form>
+  </div>
+
+  <script src="../js/search.js"></script>
+</body>
+</html>

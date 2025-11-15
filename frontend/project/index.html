@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skylink Manager | Welcome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #e0f2ff, #bfe0ff);
+      overflow: hidden;
+    }
+
+    /* Plane animations */
+    .plane {
+      position: absolute;
+      width: 80px;
+      animation: flyAcross 10s linear infinite;
+    }
+
+    @keyframes flyAcross {
+      0% {
+        transform: translateX(-100px) translateY(0);
+        opacity: 0;
+      }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% {
+        transform: translateX(110vw) translateY(20px);
+        opacity: 0;
+      }
+    }
+
+    /* Landing plane animation */
+    .plane-landing {
+      position: absolute;
+      bottom: 0;
+      left: 30%;
+      width: 120px;
+      transform: rotate(-5deg);
+      animation: land 8s ease-in-out infinite;
+    }
+
+    @keyframes land {
+      0% { transform: translateY(150px) rotate(-5deg); opacity: 0; }
+      30% { opacity: 1; }
+      60% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(150px) rotate(-5deg); opacity: 0; }
+    }
+
+    /* Floating clouds */
+    .cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.9;
+      animation: floatCloud 50s linear infinite;
+    }
+
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .cloud::before {
+      width: 60%;
+      height: 60%;
+      top: -20%;
+      left: 10%;
+    }
+
+    .cloud::after {
+      width: 70%;
+      height: 70%;
+      top: -10%;
+      right: 10%;
+    }
+
+    @keyframes floatCloud {
+      from { transform: translateX(-200px); }
+      to { transform: translateX(100vw); }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center h-screen text-center">
+
+  <!-- Animated sky background -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="cloud" style="width:120px;height:60px;top:15%;left:-100px;animation-duration:60s;"></div>
+    <div class="cloud" style="width:180px;height:80px;top:40%;left:-150px;animation-duration:70s;"></div>
+    <div class="cloud" style="width:150px;height:70px;top:65%;left:-200px;animation-duration:90s;"></div>
+
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane" style="top:20%;animation-delay:0s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane" style="top:50%;animation-delay:4s;">
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane-landing" />
+  </div>
+
+  <!-- Landing Text -->
+  <main class="relative z-10">
+    <h1 class="text-5xl font-bold text-blue-800 mb-4 drop-shadow-lg animate-pulse">Welcome to Skylink Manager</h1>
+    <p class="text-lg text-gray-700 mb-8">Manage flights, bookings, and passengers with ease.</p>
+    <button onclick="window.location.href='login.html'" class="bg-blue-600 hover:bg-blue-700 text-white text-lg px-6 py-3 rounded-full shadow-lg transition-all transform hover:scale-105">
+      Get Started ✈️
+    </button>
+  </main>
+
+  <!-- Footer -->
+  <footer class="absolute bottom-4 text-gray-600 text-sm">
+    © 2025 Skylink Manager | Fly Smart, Fly Safe
+  </footer>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aircraft Maintenance | Skylink Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-sky-50 min-h-screen flex flex-col">
+  <!-- Header -->
+  <header class="bg-blue-600 text-white py-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center px-4">
+      <h1 class="text-2xl font-semibold">✈️ Aircraft Maintenance</h1>
+      <nav class="space-x-4 text-sm">
+      <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
+      <a href="flights.html" class="bg-blue-700 p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="hover:bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
+      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
+      <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- decorative animated sky (SVG) -->
+    <div class="sky" aria-hidden="true">
+      <!-- inline SVG with simple plane and cloud animations -->
+      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#eaf3ff" />
+            <stop offset="100%" stop-color="#d6eaff" />
+          </linearGradient>
+          <g id="plane">
+            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
+            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
+          </g>
+        </defs>
+
+        <!-- moving clouds -->
+        <g class="clouds" fill="#ffffff" opacity="0.9">
+          <ellipse cx="1200" cy="40" rx="90" ry="22" />
+          <ellipse cx="1000" cy="70" rx="60" ry="18" />
+          <ellipse cx="850" cy="35" rx="70" ry="20" />
+          <ellipse cx="600" cy="60" rx="110" ry="26" />
+        </g>
+
+        <!-- repeated planes with different speeds -->
+        <use href="#plane" class="plane plane-1" x="-260" y="40" />
+        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
+        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
+      </svg>
+    </div>
+
+
+  <!-- Main -->
+  <main class="flex-1 container mx-auto p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Aircraft Maintenance Dashboard</h2>
+
+    <!-- Add Maintenance Record -->
+    <form id="maintenance-form" class="bg-white p-4 rounded-lg shadow mb-6 space-y-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-sm font-medium text-gray-700">Aircraft ID</span>
+          <input type="text" name="aircraftId" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" placeholder="e.g. A320-001" required />
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium text-gray-700">Maintenance Type</span>
+          <select name="type" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required>
+            <option value="">Select Type</option>
+            <option>Routine Inspection</option>
+            <option>Engine Check</option>
+            <option>Cabin Upgrade</option>
+            <option>Landing Gear Repair</option>
+          </select>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium text-gray-700">Date</span>
+          <input type="date" name="date" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required />
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium text-gray-700">Status</span>
+          <select name="status" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required>
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="block">
+        <span class="text-sm font-medium text-gray-700">Remarks</span>
+        <textarea name="remarks" rows="3" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" placeholder="Add remarks..."></textarea>
+      </label>
+
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Record</button>
+    </form>
+
+    <!-- Maintenance Table -->
+    <section>
+      <h3 class="text-lg font-semibold mb-2">Maintenance Records</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse bg-white rounded-lg shadow overflow-hidden">
+          <thead class="bg-blue-100 text-gray-800">
+            <tr>
+              <th class="p-3 text-left">Aircraft</th>
+              <th class="p-3 text-left">Type</th>
+              <th class="p-3 text-left">Date</th>
+              <th class="p-3 text-left">Status</th>
+              <th class="p-3 text-left">Remarks</th>
+              <th class="p-3 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="maintenance-table" class="divide-y divide-gray-200"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/maintenance.js"></script>
+</body>
+</html>

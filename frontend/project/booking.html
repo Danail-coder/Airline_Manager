@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Starlink Manager | Passenger Details</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl">
+    <h1 class="text-2xl font-bold text-blue-700 mb-4 text-center">Passenger Information</h1>
+    <nav class="space-x-4 text-sm">
+        <a href="search.html" class="hover:underline">Search</a>
+        <a href="results.html" class="hover:underline">Results</a>
+        <a href="booking.html" class="hover:underline">Booking</a>
+        <a href="user-payment.html" class="underline font-semibold">Payment</a>
+        <a href="confirmation.html" class="hover:underline">Confirmation</a>
+        <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+        </nav>
+
+    <!-- decorative animated sky (SVG) -->
+    <div class="sky" aria-hidden="true">
+      <!-- inline SVG with simple plane and cloud animations -->
+      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#eaf3ff" />
+            <stop offset="100%" stop-color="#d6eaff" />
+          </linearGradient>
+          <g id="plane">
+            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
+            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
+          </g>
+        </defs>
+
+        <!-- moving clouds -->
+        <g class="clouds" fill="#ffffff" opacity="0.9">
+          <ellipse cx="1200" cy="40" rx="90" ry="22" />
+          <ellipse cx="1000" cy="70" rx="60" ry="18" />
+          <ellipse cx="850" cy="35" rx="70" ry="20" />
+          <ellipse cx="600" cy="60" rx="110" ry="26" />
+        </g>
+
+        <!-- repeated planes with different speeds -->
+        <use href="#plane" class="plane plane-1" x="-260" y="40" />
+        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
+        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
+      </svg>
+    </div>
+
+
+    <div id="flight-summary" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <!-- Flight summary will be loaded here -->
+    </div>
+
+    <form id="booking-form" class="space-y-4">
+      <div>
+        <label class="block font-medium text-gray-700">Passenger Name</label>
+        <input id="passenger" type="text" placeholder="Full Name" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Email (optional)</label>
+        <input id="email" type="email" placeholder="example@mail.com" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700">Phone</label>
+        <input id="phone" type="tel" placeholder="+233 24 123 4567" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        Confirm Booking
+      </button>
+    </form>
+  </div>
+
+  <script src="../js/booking.js"></script>
+</body>
+</html>
