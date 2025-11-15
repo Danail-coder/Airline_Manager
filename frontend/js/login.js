@@ -29,9 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Redirect after 3.5s
       setTimeout(() => {
         if (role === "admin") {
-          window.location.href = "admin-dashboard.html";
+          window.location.href = "./admin/admin-dashboard.html";
         } else {
-          window.location.href = "search.html";
+          window.location.href = "./search.html";
         }
       }, 3500);
     } else {

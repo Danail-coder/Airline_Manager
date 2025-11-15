@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register | Skylinks</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Takeoff animation overlay */
+    #takeoff-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to top, #87ceeb, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #takeoff-screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .plane-icon {
+      width: 120px;
+      animation: takeoff 3.5s ease-in-out forwards;
+    }
+
+    @keyframes takeoff {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
+      100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
+    }
+
+    .runway {
+      width: 80%;
+      height: 8px;
+      background: repeating-linear-gradient(90deg, #333 0 20px, #666 20px 40px);
+      border-radius: 4px;
+      margin-top: 20px;
+      animation: zoomRunway 3.5s ease-in-out forwards;
+    }
+
+    @keyframes zoomRunway {
+      from { transform: scaleX(1); opacity: 1; }
+      to { transform: scaleX(2); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-sky-200 to-blue-400 min-h-screen flex items-center justify-center py-10">
+
+  <!-- Register Box -->
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
+    <h1 class="text-3xl font-bold text-blue-700 mb-2">Create Account</h1>
+    <p class="text-gray-600 text-sm mb-6">Join Skylinks and start booking flights</p>
+
+    <form id="register-form" class="space-y-4">
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+        <input type="text" id="fullname" placeholder="John Doe" required
+               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+        <input type="email" id="email" placeholder="your@email.com" required
+               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+        <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required
+               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+        <input type="password" id="password" placeholder="At least 8 characters" required
+               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+        <input type="password" id="confirm-password" placeholder="Confirm password" required
+               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+      </div>
+
+      <div class="text-left">
+        <label class="block text-sm font-semibold text-gray-700 mb-3">Register As</label>
+        <div class="flex justify-between">
+          <label class="flex items-center text-sm text-gray-700">
+            <input type="radio" name="role" value="client" required class="mr-2" />
+            Client
+          </label>
+          <label class="flex items-center text-sm text-gray-700">
+            <input type="radio" name="role" value="admin" class="mr-2" />
+            Admin
+          </label>
+        </div>
+      </div>
+
+      <div class="text-left flex items-center">
+        <input type="checkbox" id="terms" required class="mr-2" />
+        <label for="terms" class="text-sm text-gray-700">
+          I agree to the <span class="text-blue-600 hover:underline cursor-pointer">Terms and Conditions</span>
+        </label>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-all font-semibold">
+        Create Account
+      </button>
+    </form>
+
+    <p id="error-message" class="text-red-500 mt-4 hidden"></p>
+
+    <!-- Back to Login -->
+    <div class="mt-6">
+      <p class="text-sm text-gray-700">
+        Already have an account?
+        <a href="login.html" class="text-blue-600 hover:underline font-semibold">
+          Sign In
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ✈️ Takeoff Animation Overlay -->
+  <div id="takeoff-screen">
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
+    <div class="runway"></div>
+    <p class="mt-6 text-lg font-semibold text-gray-700">Registering... please wait</p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("register-form");
+      const errorMsg = document.getElementById("error-message");
+      const takeoffScreen = document.getElementById("takeoff-screen");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const fullname = document.getElementById("fullname").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const confirmPassword = document.getElementById("confirm-password").value.trim();
+        const role = document.querySelector('input[name="role"]:checked')?.value;
+        const termsAccepted = document.getElementById("terms").checked;
+
+        // Validation
+        if (!fullname || !email || !phone || !password || !confirmPassword || !role) {
+          errorMsg.textContent = "Please fill in all fields and select a role.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        if (password.length < 8) {
+          errorMsg.textContent = "Password must be at least 8 characters long.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          errorMsg.textContent = "Passwords do not match.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        if (!termsAccepted) {
+          errorMsg.textContent = "Please accept the Terms and Conditions.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        // If validation passes, show takeoff animation and redirect
+        errorMsg.classList.add("hidden");
+        takeoffScreen.classList.add("active");
+
+        // Redirect to search page after animation
+        setTimeout(() => {
+          window.location.href = "./search.html";
+        }, 3500);
+      });
+    });
+  </script>
+
+</body>
+</html>

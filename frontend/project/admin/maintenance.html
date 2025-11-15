@@ -6,12 +6,12 @@
   <title>Aircraft Maintenance | Skylink Manager</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-sky-50 min-h-screen flex flex-col">
-  <!-- Header -->
-  <header class="bg-blue-600 text-white py-4 shadow-md">
-    <div class="container mx-auto flex justify-between items-center px-4">
-      <h1 class="text-2xl font-semibold">✈️ Aircraft Maintenance</h1>
-      <nav class="space-x-4 text-sm">
+<body class="bg-gray-100 font-sans">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-blue-800 text-white h-screen p-5 fixed z-10">
+    <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
+    <nav class="flex flex-col gap-3">
       <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
       <a href="flights.html" class="bg-blue-700 p-2 rounded">✈️ Flights</a>
       <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
@@ -19,44 +19,12 @@
       <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
       <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
       <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
-      <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- decorative animated sky (SVG) -->
-    <div class="sky" aria-hidden="true">
-      <!-- inline SVG with simple plane and cloud animations -->
-      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#eaf3ff" />
-            <stop offset="100%" stop-color="#d6eaff" />
-          </linearGradient>
-          <g id="plane">
-            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
-            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
-          </g>
-        </defs>
-
-        <!-- moving clouds -->
-        <g class="clouds" fill="#ffffff" opacity="0.9">
-          <ellipse cx="1200" cy="40" rx="90" ry="22" />
-          <ellipse cx="1000" cy="70" rx="60" ry="18" />
-          <ellipse cx="850" cy="35" rx="70" ry="20" />
-          <ellipse cx="600" cy="60" rx="110" ry="26" />
-        </g>
-
-        <!-- repeated planes with different speeds -->
-        <use href="#plane" class="plane plane-1" x="-260" y="40" />
-        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
-        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
-      </svg>
-    </div>
-
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3">Logout</a>       
+    </nav>
+  </aside>
 
   <!-- Main -->
-  <main class="flex-1 container mx-auto p-6">
+  <main class="ml-64 flex-1 container p-6 bg-gray-100 min-h-screen">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Aircraft Maintenance Dashboard</h2>
 
     <!-- Add Maintenance Record -->

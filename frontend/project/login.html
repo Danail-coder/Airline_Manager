@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | Skylink Manager</title>
+  <title>Login | Skylinks</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Takeoff animation overlay */
@@ -76,6 +76,23 @@
     </form>
 
     <p id="error-message" class="text-red-500 mt-4 hidden">Invalid credentials.</p>
+
+    <!-- Forgot Password and Sign Up Links -->
+    <div class="mt-6 space-y-3">
+      <p class="text-sm text-gray-600">
+        <a href="forgot-password.html" class="text-blue-600 hover:underline font-semibold">
+          Forgot password?
+        </a>
+      </p>
+      <hr class="my-4" />
+      <p class="text-sm text-gray-700">
+        Don't have an account?
+      </p>
+      <a href="register.html"
+         class="w-full block bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-all text-center font-semibold">
+        Create New Account
+      </a>
+    </div>
   </div>
 
   <!-- ✈️ Takeoff Animation Overlay -->
