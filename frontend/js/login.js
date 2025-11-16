@@ -1,42 +1,55 @@
+// ../js/login.js
+
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("login-form");
-  const errorMsg = document.getElementById("error-message");
+  const loginForm = document.getElementById("login-form");
+  const errorMessage = document.getElementById("error-message");
   const takeoffScreen = document.getElementById("takeoff-screen");
 
-  form.addEventListener("submit", (e) => {
+  // Mock user data for demonstration (replace with real backend later)
+  const mockUsers = [
+    { email: "admin@skywings.com", password: "admin123", role: "admin" },
+    { email: "client@skywings.com", password: "client123", role: "client" }
+  ];
+
+  loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     const role = document.querySelector('input[name="role"]:checked')?.value;
 
+    // Validate inputs
     if (!email || !password || !role) {
-      errorMsg.textContent = "Please fill in all fields.";
-      errorMsg.classList.remove("hidden");
+      showError("Please fill in all fields.");
       return;
     }
 
-    const validAdmin = email === "admin@airline.com" && password === "admin123";
-    const validClient = email === "client@airline.com" && password === "client123";
+    // Check credentials
+    const user = mockUsers.find(u => u.email === email && u.password === password && u.role === role);
 
-    if ((role === "admin" && validAdmin) || (role === "client" && validClient)) {
-      // Hide error message
-      errorMsg.classList.add("hidden");
-
-      // Show takeoff animation
-      takeoffScreen.classList.add("active");
-
-      // Redirect after 3.5s
-      setTimeout(() => {
-        if (role === "admin") {
-          window.location.href = "./admin/admin-dashboard.html";
-        } else {
-          window.location.href = "./search.html";
-        }
-      }, 3500);
-    } else {
-      errorMsg.textContent = "Invalid credentials. Try again.";
-      errorMsg.classList.remove("hidden");
+    if (!user) {
+      showError("Invalid credentials.");
+      return;
     }
+
+    // Successful login: show takeoff animation
+    takeoffScreen.classList.add("active");
+
+    // Simulate takeoff animation duration (~3.5s)
+    setTimeout(() => {
+      takeoffScreen.classList.remove("active");
+      // Redirect based on role
+      if (role === "admin") {
+        window.location.href = "../admin/dashboard.html";
+      } else {
+        window.location.href = "client-dashboard.html"; // your client dashboard
+      }
+    }, 3500);
   });
+
+  function showError(msg) {
+    errorMessage.textContent = msg;
+    errorMessage.classList.remove("hidden");
+    setTimeout(() => errorMessage.classList.add("hidden"), 4000);
+  }
 });

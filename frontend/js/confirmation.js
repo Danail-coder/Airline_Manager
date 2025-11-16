@@ -1,60 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const bookingData = JSON.parse(localStorage.getItem("selectedFlight"));
-  const ticketCode = document.getElementById("ticket-code");
+  const selectedFlight = JSON.parse(localStorage.getItem("selectedFlight"));
+  const ticketDetails = document.getElementById("ticket-details");
+  const ticketId = document.getElementById("ticket-id");
+  const paymentMethodDisplay = document.getElementById("payment-method-display");
 
-  if (!bookingData) {
-    alert("No booking data found. Please go back to Booking.");
-    window.location.href = "booking.html";
+  if (!selectedFlight) {
+    ticketDetails.innerHTML = `<p class="text-red-600 text-center">No booking data found. Please go back to booking.</p>`;
     return;
   }
 
-  // Generate unique ticket number
-  const ticketNum = bookingData.ticketId || Math.floor(100000 + Math.random() * 900000);
-  ticketCode.textContent = `#SKY${ticketNum}`;
-  bookingData.ticketId = ticketNum;
+  ticketId.textContent = selectedFlight.ticketId || Math.floor(100000 + Math.random() * 900000);
 
-  // Fill ticket fields
-  document.getElementById("passenger-name").textContent = bookingData.passenger || "—";
-  document.getElementById("payment-method").textContent = bookingData.paymentMethod
-    ? `Paid via ${bookingData.paymentMethod.toUpperCase()}`
-    : "Payment method: —";
+  ticketDetails.innerHTML = `
+    <p><strong>Flight:</strong> ${selectedFlight.from} → ${selectedFlight.to}</p>
+    <p><strong>Date:</strong> ${selectedFlight.date}</p>
+    <p><strong>Class:</strong> ${selectedFlight.class}</p>
+    <p><strong>Passenger:</strong> ${selectedFlight.passenger}</p>
+    <p><strong>Email:</strong> ${selectedFlight.email || "—"}</p>
+    <p><strong>Phone:</strong> ${selectedFlight.phone}</p>
+    <p class="font-semibold text-blue-700 mt-2 text-lg">Total Fare: $${selectedFlight.price}</p>
+  `;
 
-  document.getElementById("from").textContent = bookingData.from || "—";
-  document.getElementById("to").textContent = bookingData.to || "—";
-  document.getElementById("date").textContent = bookingData.date || "—";
-  document.getElementById("class").textContent = bookingData.class || "—";
-  document.getElementById("fare").textContent = `$${bookingData.price || "—"}`;
+  if (selectedFlight.paymentMethod) {
+    paymentMethodDisplay.textContent = `Paid via: ${selectedFlight.paymentMethod.toUpperCase()}`;
+  }
 
-  // Randomize flight and seat if not set
-  document.getElementById("flight-number").textContent =
-    bookingData.flightNo || `SK${Math.floor(1000 + Math.random() * 9000)}`;
-  document.getElementById("seat").textContent =
-    bookingData.seat || `${String.fromCharCode(65 + Math.floor(Math.random() * 6))}${Math.floor(1 + Math.random() * 30)}`;
-
-  localStorage.setItem("selectedFlight", JSON.stringify(bookingData));
-
-  // 🎨 DOWNLOAD PNG
-  document.getElementById("download-png").addEventListener("click", async () => {
-    const ticket = document.getElementById("ticket");
-    const canvas = await html2canvas(ticket);
-    const link = document.createElement("a");
-    link.download = `Skylink_Ticket_${ticketNum}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
-
-  // 📄 DOWNLOAD PDF
-  document.getElementById("download-pdf").addEventListener("click", async () => {
-    const ticket = document.getElementById("ticket");
-    const canvas = await html2canvas(ticket);
-    const imgData = canvas.toDataURL("image/png");
-
+  // Download PDF
+  document.getElementById("download-ticket").addEventListener("click", () => {
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF("p", "mm", "a4");
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (canvas.height * width) / canvas.width;
+    const doc = new jsPDF();
 
-    pdf.addImage(imgData, "PNG", 0, 10, width, height);
-    pdf.save(`Skylink_Ticket_${ticketNum}.pdf`);
+    doc.setFontSize(18);
+    doc.text("SkyWings Ticket", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Ticket ID: #AERO${ticketId.textContent}`, 20, 35);
+    doc.text(`Passenger: ${selectedFlight.passenger}`, 20, 45);
+    doc.text(`Email: ${selectedFlight.email || "—"}`, 20, 55);
+    doc.text(`Phone: ${selectedFlight.phone}`, 20, 65);
+    doc.text(`Flight: ${selectedFlight.from} → ${selectedFlight.to}`, 20, 75);
+    doc.text(`Date: ${selectedFlight.date}`, 20, 85);
+    doc.text(`Class: ${selectedFlight.class}`, 20, 95);
+    doc.text(`Total Fare: $${selectedFlight.price}`, 20, 105);
+    if (selectedFlight.paymentMethod) {
+      doc.text(`Payment: ${selectedFlight.paymentMethod.toUpperCase()}`, 20, 115);
+    }
+
+    doc.save(`SkyWingsTicket_${ticketId.textContent}.pdf`);
   });
 });

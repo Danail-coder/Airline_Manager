@@ -3,41 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aircraft Maintenance | Skylink Manager</title>
+  <title>SkyWings | Aircraft Maintenance</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
+
+    body { background-color: var(--gray); }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .input-field { border: 1px solid #ccc; padding: 0.5rem; border-radius: 0.5rem; transition: all 0.3s; }
+    .input-field:focus { border-color: var(--sky-blue); outline: none; box-shadow: 0 0 5px var(--sky-blue-light); }
+    .btn-primary { background-color: var(--sky-blue); color: var(--white); transition: all 0.3s; }
+    .btn-primary:hover { background-color: var(--sky-blue-light); }
+    table th, table td { padding: 0.75rem; }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="font-sans flex">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-blue-800 text-white h-screen p-5 fixed z-10">
+  <aside class="w-64 bg-deep-blue text-white h-screen p-5 fixed z-10 sidebar">
+    <img src="https://cdn-icons-png.flaticon.com/512/804/804920.png" alt="SkyWings Logo" class="w-24 mb-8">
     <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
     <nav class="flex flex-col gap-3">
-      <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
-      <a href="flights.html" class="bg-blue-700 p-2 rounded">✈️ Flights</a>
-      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
-      <a href="staff.html" class="hover:bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
-      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
-      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
-      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
-      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3">Logout</a>       
+      <a href="dashboard.html" class="hover:bg-sky-blue p-2 rounded">🏠 Dashboard</a>
+      <a href="flights.html" class="hover:bg-sky-blue p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-sky-blue p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="hover:bg-sky-blue p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="bg-sky-blue p-2 rounded active">🔧 Maintenance</a>
+      <a href="reports.html" class="hover:bg-sky-blue p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="hover:bg-sky-blue p-2 rounded">⚙️ System</a>
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mt-6">Logout</a>
     </nav>
   </aside>
 
   <!-- Main -->
-  <main class="ml-64 flex-1 container p-6 bg-gray-100 min-h-screen">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Aircraft Maintenance Dashboard</h2>
+  <main class="ml-64 flex-1 container p-6 min-h-screen relative z-10">
+
+    <h2 class="text-xl font-semibold text-deep-blue mb-4">Aircraft Maintenance Dashboard</h2>
 
     <!-- Add Maintenance Record -->
-    <form id="maintenance-form" class="bg-white p-4 rounded-lg shadow mb-6 space-y-4">
+    <form id="maintenance-form" class="bg-white p-6 rounded-lg shadow mb-6 fade-in">
       <div class="grid md:grid-cols-2 gap-4">
         <label class="block">
           <span class="text-sm font-medium text-gray-700">Aircraft ID</span>
-          <input type="text" name="aircraftId" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" placeholder="e.g. A320-001" required />
+          <input type="text" id="aircraft-id" class="input-field w-full" placeholder="e.g. A320-001" required />
         </label>
-
         <label class="block">
           <span class="text-sm font-medium text-gray-700">Maintenance Type</span>
-          <select name="type" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required>
+          <select id="type" class="input-field w-full" required>
             <option value="">Select Type</option>
             <option>Routine Inspection</option>
             <option>Engine Check</option>
@@ -45,51 +64,49 @@
             <option>Landing Gear Repair</option>
           </select>
         </label>
-
         <label class="block">
           <span class="text-sm font-medium text-gray-700">Date</span>
-          <input type="date" name="date" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required />
+          <input type="date" id="date" class="input-field w-full" required />
         </label>
-
         <label class="block">
           <span class="text-sm font-medium text-gray-700">Status</span>
-          <select name="status" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" required>
+          <select id="status" class="input-field w-full" required>
             <option>Pending</option>
             <option>In Progress</option>
             <option>Completed</option>
           </select>
         </label>
       </div>
-
-      <label class="block">
+      <label class="block mt-4">
         <span class="text-sm font-medium text-gray-700">Remarks</span>
-        <textarea name="remarks" rows="3" class="mt-1 w-full border rounded p-2 focus:ring focus:ring-blue-300" placeholder="Add remarks..."></textarea>
+        <textarea id="remarks" rows="3" class="input-field w-full" placeholder="Add remarks..."></textarea>
       </label>
 
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Add Record</button>
+      <button type="submit" class="btn-primary mt-4 px-4 py-2 rounded">Add Record</button>
     </form>
 
     <!-- Maintenance Table -->
-    <section>
-      <h3 class="text-lg font-semibold mb-2">Maintenance Records</h3>
+    <section class="fade-in">
+      <h3 class="text-lg font-semibold mb-2 text-deep-blue">Maintenance Records</h3>
       <div class="overflow-x-auto">
         <table class="w-full border-collapse bg-white rounded-lg shadow overflow-hidden">
-          <thead class="bg-blue-100 text-gray-800">
+          <thead class="bg-sky-blue-light text-white">
             <tr>
-              <th class="p-3 text-left">Aircraft</th>
-              <th class="p-3 text-left">Type</th>
-              <th class="p-3 text-left">Date</th>
-              <th class="p-3 text-left">Status</th>
-              <th class="p-3 text-left">Remarks</th>
-              <th class="p-3 text-left">Actions</th>
+              <th>Aircraft</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Remarks</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="maintenance-table" class="divide-y divide-gray-200"></tbody>
         </table>
       </div>
     </section>
+
   </main>
 
-  <script src="js/maintenance.js"></script>
+  <script src="../js/admin-maintenance.js"></script>
 </body>
 </html>

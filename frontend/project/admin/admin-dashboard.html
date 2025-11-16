@@ -3,62 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skylink Manager | Admin Dashboard</title>
+  <title>SkyWings | Admin Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
+    body { background-color: var(--gray); }
+    .sidebar a.active { background-color: var(--sky-blue-light); }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans flex">
+<body class="font-sans flex">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-blue-800 text-white h-screen p-5 fixed">
+  <aside class="w-64 bg-deep-blue text-white h-screen p-5 fixed sidebar">
+    <img src="https://cdn-icons-png.flaticon.com/512/804/804920.png" alt="SkyWings Logo" class="w-24 mb-8">
     <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
     <nav class="flex flex-col gap-3">
-      <a href="dashboard.html" class="bg-blue-700 p-2 rounded">🏠 Dashboard</a>
-      <a href="flights.html" class="hover:bg-blue-700 p-2 rounded">✈️ Flights</a>
-      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
-      <a href="staff.html" class="hover:bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
-      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
-      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
-      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
-        <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+      <a href="dashboard.html" class="bg-sky-blue p-2 rounded active">🏠 Dashboard</a>
+      <a href="flights.html" class="hover:bg-sky-blue p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-sky-blue p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="hover:bg-sky-blue p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="hover:bg-sky-blue p-2 rounded">🔧 Maintenance</a>
+      <a href="reports.html" class="hover:bg-sky-blue p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="hover:bg-sky-blue p-2 rounded">⚙️ System</a>
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3 mt-6">Logout</a>
     </nav>
   </aside>
 
   <!-- decorative animated sky (SVG) -->
-    <div class="sky" aria-hidden="true">
-      <!-- inline SVG with simple plane and cloud animations -->
-      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#eaf3ff" />
-            <stop offset="100%" stop-color="#d6eaff" />
-          </linearGradient>
-          <g id="plane">
-            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
-            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
-          </g>
-        </defs>
-
-        <!-- moving clouds -->
-        <g class="clouds" fill="#ffffff" opacity="0.9">
-          <ellipse cx="1200" cy="40" rx="90" ry="22" />
-          <ellipse cx="1000" cy="70" rx="60" ry="18" />
-          <ellipse cx="850" cy="35" rx="70" ry="20" />
-          <ellipse cx="600" cy="60" rx="110" ry="26" />
+  <div class="sky absolute top-0 left-64 w-full h-52 z-0" aria-hidden="true">
+    <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#eaf3ff" />
+          <stop offset="100%" stop-color="#d6eaff" />
+        </linearGradient>
+        <g id="plane">
+          <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
+          <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
         </g>
-
-        <!-- repeated planes with different speeds -->
-        <use href="#plane" class="plane plane-1" x="-260" y="40" />
-        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
-        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
-      </svg>
-    </div>
-
+      </defs>
+      <g class="clouds" fill="#ffffff" opacity="0.9">
+        <ellipse cx="1200" cy="40" rx="90" ry="22" />
+        <ellipse cx="1000" cy="70" rx="60" ry="18" />
+        <ellipse cx="850" cy="35" rx="70" ry="20" />
+        <ellipse cx="600" cy="60" rx="110" ry="26" />
+      </g>
+      <use href="#plane" class="plane plane-1" x="-260" y="40" />
+      <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
+      <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
+    </svg>
+  </div>
 
   <!-- Main Content -->
-  <main class="ml-64 flex-1 p-6">
+  <main class="ml-64 flex-1 p-6 relative z-10">
     <header class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-semibold text-gray-800">Dashboard Overview</h1>
+      <h1 class="text-3xl font-semibold text-deep-blue">Dashboard Overview</h1>
       <div class="bg-white p-2 rounded shadow text-gray-700">
         <span id="current-date"></span>
       </div>
@@ -66,29 +73,29 @@
 
     <!-- Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-      <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+      <div class="bg-white p-4 rounded-lg shadow fade-in">
         <h2 class="text-gray-600">Total Flights</h2>
-        <p id="total-flights" class="text-3xl font-bold text-blue-700">0</p>
+        <p id="total-flights" class="text-3xl font-bold text-sky-blue">0</p>
       </div>
-      <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+      <div class="bg-white p-4 rounded-lg shadow fade-in">
         <h2 class="text-gray-600">Passengers</h2>
-        <p id="total-passengers" class="text-3xl font-bold text-blue-700">0</p>
+        <p id="total-passengers" class="text-3xl font-bold text-sky-blue">0</p>
       </div>
-      <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+      <div class="bg-white p-4 rounded-lg shadow fade-in">
         <h2 class="text-gray-600">Revenue</h2>
-        <p id="total-revenue" class="text-3xl font-bold text-blue-700">$0</p>
+        <p id="total-revenue" class="text-3xl font-bold text-sky-blue">$0</p>
       </div>
-      <div class="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+      <div class="bg-white p-4 rounded-lg shadow fade-in">
         <h2 class="text-gray-600">Maintenance Tasks</h2>
-        <p id="total-maintenance" class="text-3xl font-bold text-blue-700">0</p>
+        <p id="total-maintenance" class="text-3xl font-bold text-sky-blue">0</p>
       </div>
     </section>
 
-    <!-- Charts / Tables -->
-    <section class="bg-white p-6 rounded-lg shadow">
-      <h2 class="text-xl font-semibold mb-4 text-gray-800">Recent Flights</h2>
+    <!-- Recent Flights Table -->
+    <section class="bg-white p-6 rounded-lg shadow fade-in">
+      <h2 class="text-xl font-semibold mb-4 text-deep-blue">Recent Flights</h2>
       <table class="w-full text-left border border-gray-200">
-        <thead class="bg-blue-50">
+        <thead class="bg-sky-blue-light text-white">
           <tr>
             <th class="p-2 border-b">Flight ID</th>
             <th class="p-2 border-b">Route</th>

@@ -1,96 +1,98 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const flights = JSON.parse(localStorage.getItem("flights")) || [];
+
   const flightsTable = document.getElementById("flights-table");
+  const flightFormSection = document.getElementById("flight-form-section");
+  const flightForm = document.getElementById("flight-form");
   const addBtn = document.getElementById("add-flight-btn");
-  const formSection = document.getElementById("flight-form-section");
-  const form = document.getElementById("flight-form");
   const cancelBtn = document.getElementById("cancel-form");
   const formTitle = document.getElementById("form-title");
-  const idField = document.getElementById("flight-id");
 
-  // Mock Flight Data
-  let flights = [
-    { id: "FL101", from: "Accra", to: "Kumasi", date: "2025-11-10", duration: "1h 10m", aircraft: "Boeing 737", status: "Scheduled" },
-    { id: "FL102", from: "Accra", to: "Lagos", date: "2025-11-12", duration: "2h 30m", aircraft: "Airbus A320", status: "Departed" },
-    { id: "FL103", from: "Accra", to: "London", date: "2025-11-15", duration: "6h 45m", aircraft: "Boeing 787", status: "Completed" }
-  ];
-
-  function renderFlights() {
-    flightsTable.innerHTML = "";
-    flights.forEach(f => {
-      const row = `
-        <tr class="hover:bg-gray-50">
-          <td class="p-2 border-b">${f.id}</td>
-          <td class="p-2 border-b">${f.from} - ${f.to}</td>
+  const renderFlights = () => {
+    if (flights.length === 0) {
+      flightsTable.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-gray-500">No flights found</td></tr>`;
+      return;
+    }
+    flightsTable.innerHTML = flights
+      .map((f, index) => `
+        <tr class="hover:bg-sky-blue-light transition">
+          <td class="p-2 border-b">${f.id || index + 1}</td>
+          <td class="p-2 border-b">${f.from} → ${f.to}</td>
           <td class="p-2 border-b">${f.date}</td>
           <td class="p-2 border-b">${f.duration}</td>
           <td class="p-2 border-b">${f.aircraft}</td>
           <td class="p-2 border-b">${f.status}</td>
           <td class="p-2 border-b text-center">
-            <button class="text-blue-600 hover:underline mr-2" onclick="editFlight('${f.id}')">Edit</button>
-            <button class="text-red-600 hover:underline" onclick="deleteFlight('${f.id}')">Delete</button>
+            <button class="edit-btn text-blue-700 mr-2">Edit</button>
+            <button class="delete-btn text-red-500">Delete</button>
           </td>
         </tr>
-      `;
-      flightsTable.insertAdjacentHTML("beforeend", row);
-    });
-  }
+      `).join('');
+  };
 
-  // Add new flight
+  // Show Add Form
   addBtn.addEventListener("click", () => {
-    form.reset();
-    idField.value = "";
+    flightFormSection.classList.remove("hidden");
+    flightForm.reset();
     formTitle.textContent = "Add New Flight";
-    formSection.classList.remove("hidden");
   });
 
-  // Cancel form
-  cancelBtn.addEventListener("click", () => formSection.classList.add("hidden"));
+  // Cancel Form
+  cancelBtn.addEventListener("click", () => flightFormSection.classList.add("hidden"));
 
-  // Save flight
-  form.addEventListener("submit", (e) => {
+  // Handle Add/Edit Flight
+  flightForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const flight = {
-      id: idField.value || `FL${Math.floor(Math.random() * 900 + 100)}`,
-      from: form.from.value,
-      to: form.to.value,
-      date: form.date.value,
-      duration: form.duration.value,
-      aircraft: form.aircraft.value,
-      status: form.status.value
+    const flightData = {
+      id: document.getElementById("flight-id").value || Date.now(),
+      from: document.getElementById("from").value,
+      to: document.getElementById("to").value,
+      date: document.getElementById("date").value,
+      duration: document.getElementById("duration").value,
+      aircraft: document.getElementById("aircraft").value,
+      status: document.getElementById("status").value
     };
 
-    if (idField.value) {
-      flights = flights.map(f => f.id === idField.value ? flight : f);
-    } else {
-      flights.push(flight);
-    }
+    const editIndex = flights.findIndex(f => f.id == flightData.id);
+    if (editIndex >= 0) flights[editIndex] = flightData;
+    else flights.push(flightData);
 
+    localStorage.setItem("flights", JSON.stringify(flights));
     renderFlights();
-    formSection.classList.add("hidden");
+    flightFormSection.classList.add("hidden");
   });
 
-  // Expose edit & delete globally
-  window.editFlight = (id) => {
-    const flight = flights.find(f => f.id === id);
-    if (flight) {
-      formSection.classList.remove("hidden");
+  // Edit/Delete Buttons
+  flightsTable.addEventListener("click", (e) => {
+    if (e.target.classList.contains("edit-btn")) {
+      const rowIndex = e.target.closest("tr").rowIndex - 1;
+      const f = flights[rowIndex];
+      flightFormSection.classList.remove("hidden");
       formTitle.textContent = "Edit Flight";
-      idField.value = flight.id;
-      form.from.value = flight.from;
-      form.to.value = flight.to;
-      form.date.value = flight.date;
-      form.duration.value = flight.duration;
-      form.aircraft.value = flight.aircraft;
-      form.status.value = flight.status;
+      document.getElementById("flight-id").value = f.id;
+      document.getElementById("from").value = f.from;
+      document.getElementById("to").value = f.to;
+      document.getElementById("date").value = f.date;
+      document.getElementById("duration").value = f.duration;
+      document.getElementById("aircraft").value = f.aircraft;
+      document.getElementById("status").value = f.status;
     }
-  };
-
-  window.deleteFlight = (id) => {
-    if (confirm("Are you sure you want to delete this flight?")) {
-      flights = flights.filter(f => f.id !== id);
-      renderFlights();
+    if (e.target.classList.contains("delete-btn")) {
+      const rowIndex = e.target.closest("tr").rowIndex - 1;
+      if (confirm("Are you sure you want to delete this flight?")) {
+        flights.splice(rowIndex, 1);
+        localStorage.setItem("flights", JSON.stringify(flights));
+        renderFlights();
+      }
     }
-  };
+  });
 
+  // Initial render
   renderFlights();
+
+  // Animate form and table
+  setTimeout(() => {
+    flightFormSection.classList.add("visible");
+    document.querySelectorAll(".fade-in").forEach(el => el.classList.add("visible"));
+  }, 200);
 });

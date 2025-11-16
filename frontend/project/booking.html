@@ -3,80 +3,209 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Starlink | Passenger Details</title>
+  <title>SkyWings | Passenger Details</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ------------------------- */
+    /* SkyWings Brand Colors */
+    /* ------------------------- */
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+      --sky-gold: #ffb400;
+    }
+
+    body {
+      background-color: var(--gray);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ------------------------- */
+    /* Animations */
+    /* ------------------------- */
+    .fade-in {
+      animation: fadeIn 0.9s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .clouds ellipse {
+      animation: cloudMove 28s linear infinite;
+    }
+    @keyframes cloudMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-1400px); }
+    }
+
+    .plane-1 { animation: planeFly 16s linear infinite; }
+    .plane-2 { animation: planeFly 20s linear infinite; opacity: 0.85; }
+    .plane-3 { animation: planeFly 24s linear infinite; opacity: 0.7; }
+    @keyframes planeFly {
+      0% { transform: translateX(-200px); }
+      100% { transform: translateX(1400px); }
+    }
+
+    /* ------------------------- */
+    /* Inputs & Buttons */
+    /* ------------------------- */
+    input, select {
+      transition: 0.25s ease-in-out;
+    }
+    input:focus, select:focus {
+      transform: scale(1.02);
+      border-color: var(--sky-blue);
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
+      outline: none;
+    }
+
+    button {
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* ------------------------- */
+    /* Responsive */
+    /* ------------------------- */
+    @media (max-width: 640px) {
+      nav a { display: block; margin-bottom: 6px; }
+      #sky-svg { height: 140px; }
+      .plane-1, .plane-2, .plane-3 { transform: scale(0.6); }
+      .card { padding: 1.5rem; }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
 
-  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl">
-    <h1 class="text-2xl font-bold text-blue-700 mb-4 text-center">Passenger Information</h1>
-    <nav class="space-x-4 text-sm">
-        <a href="search.html" class="hover:underline">Search</a>
-        <a href="results.html" class="hover:underline">Results</a>
-        <a href="booking.html" class="hover:underline">Booking</a>
-        <a href="user-payment.html" class="underline font-semibold">Payment</a>
-        <a href="confirmation.html" class="hover:underline">Confirmation</a>
-        <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
-        </nav>
+<body class="min-h-screen flex flex-col items-center p-4 fade-in">
 
-    <!-- decorative animated sky (SVG) -->
-    <div class="sky" aria-hidden="true">
-      <!-- inline SVG with simple plane and cloud animations -->
-      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <!-- ------------------------- -->
+  <!-- Main Card -->
+  <!-- ------------------------- -->
+  <div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-2xl fade-in card">
+
+    <!-- Logo & Title -->
+    <div class="flex flex-col items-center justify-center mb-6 gap-2">
+      <img src="../assets/logo.png" alt="SkyWings Logo" class="w-16 h-16">
+      <h1 class="text-3xl font-bold text-[var(--sky-blue)] fade-in">Passenger Information</h1>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex flex-wrap justify-center space-x-4 text-sm mb-6">
+      <a href="search.html" class="hover:underline">Search</a>
+      <a href="results.html" class="hover:underline">Results</a>
+      <a href="booking.html" class="hover:underline">Booking</a>
+      <a href="user-payment.html" class="underline font-semibold text-[var(--sky-blue)]">Payment</a>
+      <a href="confirmation.html" class="hover:underline">Confirmation</a>
+      <a href="login.html" class="text-red-500 hover:underline">Logout</a>
+    </nav>
+
+    <!-- Sky & Planes SVG -->
+    <div class="sky mb-6" aria-hidden="true">
+      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" class="w-full h-40">
         <defs>
           <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#eaf3ff" />
+            <stop offset="0%" stop-color="#e8f2ff" />
             <stop offset="100%" stop-color="#d6eaff" />
           </linearGradient>
           <g id="plane">
-            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
-            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
+            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="white" stroke="#ccdff9" stroke-width="1"/>
+            <rect x="10" y="8" width="36" height="8" rx="3" fill="var(--sky-gold)"/>
           </g>
         </defs>
 
-        <!-- moving clouds -->
         <g class="clouds" fill="#ffffff" opacity="0.9">
-          <ellipse cx="1200" cy="40" rx="90" ry="22" />
-          <ellipse cx="1000" cy="70" rx="60" ry="18" />
-          <ellipse cx="850" cy="35" rx="70" ry="20" />
-          <ellipse cx="600" cy="60" rx="110" ry="26" />
+          <ellipse cx="1150" cy="45" rx="90" ry="22" />
+          <ellipse cx="900" cy="75" rx="60" ry="18" />
+          <ellipse cx="750" cy="35" rx="70" ry="20" />
+          <ellipse cx="550" cy="60" rx="110" ry="26" />
         </g>
 
-        <!-- repeated planes with different speeds -->
-        <use href="#plane" class="plane plane-1" x="-260" y="40" />
-        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
-        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
+        <use href="#plane" class="plane-1" x="-250" y="50" />
+        <use href="#plane" class="plane-2" x="-300" y="100" transform="scale(0.85)" />
+        <use href="#plane" class="plane-3" x="-450" y="20" transform="scale(0.7)" />
       </svg>
     </div>
 
-
-    <div id="flight-summary" class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-      <!-- Flight summary will be loaded here -->
+    <!-- Flight Summary -->
+    <div id="flight-summary" class="bg-[var(--sky-blue-light)] border border-blue-200 rounded-lg p-4 mb-6 fade-in">
+      <!-- Flight info will be dynamically inserted here via JS/localStorage -->
     </div>
 
-    <form id="booking-form" class="space-y-4">
+    <!-- Passenger Form -->
+    <form id="booking-form" class="space-y-4 fade-in">
       <div>
         <label class="block font-medium text-gray-700">Passenger Name</label>
-        <input id="passenger" type="text" placeholder="Full Name" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+        <input id="passenger" type="text" placeholder="Full Name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-[var(--sky-blue)]">
       </div>
 
       <div>
         <label class="block font-medium text-gray-700">Email (optional)</label>
-        <input id="email" type="email" placeholder="example@mail.com" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+        <input id="email" type="email" placeholder="example@mail.com" class="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-[var(--sky-blue)]">
       </div>
 
       <div>
         <label class="block font-medium text-gray-700">Phone</label>
-        <input id="phone" type="tel" placeholder="+233 24 123 4567" required class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200">
+        <input id="phone" type="tel" placeholder="+233 24 123 4567" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring focus:ring-[var(--sky-blue)]">
       </div>
 
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+      <button type="submit" class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-lg hover:bg-blue-800 transition shadow-md">
         Confirm Booking
       </button>
     </form>
   </div>
 
+  <!-- JS -->
   <script src="../js/booking.js"></script>
+  <script>
+    // Populate flight summary from localStorage
+    const flightSummary = document.getElementById('flight-summary');
+    const flightData = JSON.parse(localStorage.getItem('selectedFlight'));
+    if (flightData) {
+      flightSummary.innerHTML = `
+        <h2 class="font-semibold text-lg mb-2">Flight Summary</h2>
+        <p><strong>From:</strong> ${flightData.from}</p>
+        <p><strong>To:</strong> ${flightData.to}</p>
+        <p><strong>Date:</strong> ${flightData.date}</p>
+        <p><strong>Time:</strong> ${flightData.time}</p>
+        <p><strong>Seats:</strong> ${flightData.seats}</p>
+      `;
+    } else {
+      flightSummary.innerHTML = `<p class="text-gray-500">No flight selected yet.</p>`;
+    }
+
+    // Optional Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    }
+
+    // Booking form submission
+    const bookingForm = document.getElementById('booking-form');
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const passenger = document.getElementById('passenger').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!passenger || !phone) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const bookingInfo = { passenger, email, phone };
+      localStorage.setItem('passengerInfo', JSON.stringify(bookingInfo));
+      alert('Booking confirmed! ✈️');
+      // Redirect or proceed to payment
+      window.location.href = 'user-payment.html';
+    });
+  </script>
 </body>
 </html>

@@ -3,40 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Settings | Skylink Manager</title>
+  <title>SkyWings | Settings</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
+    body { background-color: var(--gray); }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="font-sans flex">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-blue-800 text-white h-screen p-5 fixed z-10">
+  <aside class="w-64 bg-deep-blue text-white h-screen p-5 fixed z-10">
+    <img src="https://cdn-icons-png.flaticon.com/512/804/804920.png" alt="SkyWings Logo" class="w-24 mb-8">
     <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
     <nav class="flex flex-col gap-3">
-      <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
-      <a href="flights.html" class="bg-blue-700 p-2 rounded">✈️ Flights</a>
-      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
-      <a href="staff.html" class="hover:bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
-      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
-      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
-      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
-      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3">Logout</a>       
+      <a href="dashboard.html" class="hover:bg-sky-blue p-2 rounded">🏠 Dashboard</a>
+      <a href="flights.html" class="hover:bg-sky-blue p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-sky-blue p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="hover:bg-sky-blue p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="hover:bg-sky-blue p-2 rounded">🔧 Maintenance</a>
+      <a href="reports.html" class="hover:bg-sky-blue p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="bg-sky-blue p-2 rounded">⚙️ System</a>
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mt-6">Logout</a>
     </nav>
   </aside>
 
   <!-- Settings Content -->
-  <main class="ml-64 flex-1 container p-6 bg-gray-100 min-h-screen max-w-3xl mx-auto">
+  <main class="ml-64 flex-1 container p-6 min-h-screen max-w-3xl mx-auto fade-in">
     <div class="bg-white rounded-xl shadow-md p-6">
-      <h2 class="text-xl font-semibold mb-4 text-gray-700">General Settings</h2>
+      <h2 class="text-xl font-semibold mb-4 text-deep-blue">General Settings</h2>
 
       <form id="settings-form" class="space-y-5">
         <div>
           <label class="block text-gray-600">Airline Name</label>
-          <input type="text" id="airlineName" class="w-full p-3 border rounded-md" placeholder="e.g. SkyJet Airlines" />
+          <input type="text" id="airlineName" class="w-full p-3 border rounded-md focus:ring focus:ring-sky-blue" placeholder="e.g. SkyWings Airlines" />
         </div>
 
         <div>
           <label class="block text-gray-600">Theme Color</label>
-          <select id="themeColor" class="w-full p-3 border rounded-md">
+          <select id="themeColor" class="w-full p-3 border rounded-md focus:ring focus:ring-sky-blue">
             <option value="blue">Blue</option>
             <option value="sky">Sky</option>
             <option value="indigo">Indigo</option>
@@ -46,7 +59,7 @@
 
         <div>
           <label class="block text-gray-600">Timezone</label>
-          <select id="timezone" class="w-full p-3 border rounded-md">
+          <select id="timezone" class="w-full p-3 border rounded-md focus:ring focus:ring-sky-blue">
             <option value="GMT">GMT</option>
             <option value="UTC">UTC</option>
             <option value="WAT">West Africa Time</option>
@@ -55,16 +68,20 @@
         </div>
 
         <button type="submit"
-                class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-all">
+                class="bg-sky-blue text-white py-3 px-6 rounded-lg hover:bg-sky-blue-light transition-all">
           Save Settings
         </button>
       </form>
-    </div>
 
-    <!-- Confirmation -->
-    <p id="statusMessage" class="text-green-600 mt-6 hidden">✅ Settings updated successfully!</p>
+      <!-- Confirmation -->
+      <p id="statusMessage" class="text-green-600 mt-6 hidden">✅ Settings updated successfully!</p>
+    </div>
   </main>
 
-  <script src="js/settings.js"></script>
+  <script src="../js/settings.js"></script>
+  <script>
+    // Fade-in animation
+    setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 200);
+  </script>
 </body>
 </html>

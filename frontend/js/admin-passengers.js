@@ -1,101 +1,100 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const table = document.getElementById("passenger-table");
   const formSection = document.getElementById("passenger-form-section");
-  const form = document.getElementById("passenger-form");
   const addBtn = document.getElementById("add-passenger-btn");
   const cancelBtn = document.getElementById("cancel-form");
-  const formTitle = document.getElementById("form-title");
-  const idField = document.getElementById("passenger-id");
+  const passengerForm = document.getElementById("passenger-form");
+  const passengerTable = document.getElementById("passenger-table");
 
-  // Mock Passenger Data
-  let passengers = [
-    { id: "P001", name: "Daniel Junior", passport: "GH123456", nationality: "Ghanaian", email: "daniel@mail.com", phone: "+233501234567", flight: "FL101", seat: "12A", status: "Checked-In" },
-    { id: "P002", name: "Ama Serwaa", passport: "GH987654", nationality: "Ghanaian", email: "ama@mail.com", phone: "+233209876543", flight: "FL103", seat: "9B", status: "Pending" },
-  ];
+  const inputs = {
+    id: document.getElementById("passenger-id"),
+    name: document.getElementById("name"),
+    passport: document.getElementById("passport"),
+    nationality: document.getElementById("nationality"),
+    email: document.getElementById("email"),
+    phone: document.getElementById("phone"),
+    flight: document.getElementById("flight"),
+    seat: document.getElementById("seat"),
+    status: document.getElementById("status")
+  };
 
-  // Render Passenger Table
-  function renderPassengers() {
-    table.innerHTML = "";
-    passengers.forEach(p => {
-      const row = `
-        <tr class="hover:bg-gray-50">
-          <td class="p-2 border-b">${p.id}</td>
-          <td class="p-2 border-b">${p.name}</td>
-          <td class="p-2 border-b">${p.passport}</td>
-          <td class="p-2 border-b">${p.flight}</td>
-          <td class="p-2 border-b">${p.seat}</td>
-          <td class="p-2 border-b">${p.status}</td>
-          <td class="p-2 border-b text-center">
-            <button class="text-blue-600 hover:underline mr-2" onclick="editPassenger('${p.id}')">Edit</button>
-            <button class="text-red-600 hover:underline" onclick="deletePassenger('${p.id}')">Delete</button>
-          </td>
-        </tr>
-      `;
-      table.insertAdjacentHTML("beforeend", row);
-    });
-  }
+  const passengers = JSON.parse(localStorage.getItem("passengers")) || [];
 
-  // Add Passenger
-  addBtn.addEventListener("click", () => {
-    form.reset();
-    idField.value = "";
-    formTitle.textContent = "Add New Passenger";
-    formSection.classList.remove("hidden");
+  const renderPassengers = () => {
+    if (!passengers.length) {
+      passengerTable.innerHTML = `<tr><td colspan="7" class="p-3 text-center text-gray-500">No passengers found</td></tr>`;
+      return;
+    }
+    passengerTable.innerHTML = passengers.map((p, idx) => `
+      <tr class="hover:bg-gray-100 transition">
+        <td>${idx + 1}</td>
+        <td>${p.name}</td>
+        <td>${p.passport}</td>
+        <td>${p.flight}</td>
+        <td>${p.seat}</td>
+        <td>${p.status}</td>
+        <td class="text-center">
+          <button class="edit-btn text-sky-blue mr-2">Edit</button>
+          <button class="delete-btn text-red-500">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+  };
+
+  addBtn.addEventListener("click", () => formSection.classList.remove("hidden"));
+  cancelBtn.addEventListener("click", () => {
+    formSection.classList.add("hidden");
+    passengerForm.reset();
   });
 
-  // Cancel Form
-  cancelBtn.addEventListener("click", () => formSection.classList.add("hidden"));
-
-  // Save Passenger
-  form.addEventListener("submit", (e) => {
+  passengerForm.addEventListener("submit", e => {
     e.preventDefault();
-
-    const passenger = {
-      id: idField.value || `P${Math.floor(Math.random() * 900 + 100)}`,
-      name: form.name.value,
-      passport: form.passport.value,
-      nationality: form.nationality.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      flight: form.flight.value,
-      seat: form.seat.value,
-      status: form.status.value,
+    const newPassenger = {
+      id: Date.now(),
+      name: inputs.name.value,
+      passport: inputs.passport.value,
+      nationality: inputs.nationality.value,
+      email: inputs.email.value,
+      phone: inputs.phone.value,
+      flight: inputs.flight.value,
+      seat: inputs.seat.value,
+      status: inputs.status.value
     };
-
-    if (idField.value) {
-      passengers = passengers.map(p => p.id === idField.value ? passenger : p);
-    } else {
-      passengers.push(passenger);
-    }
-
+    passengers.push(newPassenger);
+    localStorage.setItem("passengers", JSON.stringify(passengers));
     renderPassengers();
+    passengerForm.reset();
     formSection.classList.add("hidden");
   });
 
-  // Expose edit & delete
-  window.editPassenger = (id) => {
-    const p = passengers.find(p => p.id === id);
-    if (p) {
+  passengerTable.addEventListener("click", e => {
+    const row = e.target.closest("tr");
+    if (!row) return;
+    const index = Array.from(passengerTable.rows).indexOf(row);
+    if (e.target.classList.contains("delete-btn")) {
+      if (confirm("Delete this passenger?")) {
+        passengers.splice(index, 1);
+        localStorage.setItem("passengers", JSON.stringify(passengers));
+        renderPassengers();
+      }
+    } else if (e.target.classList.contains("edit-btn")) {
+      const p = passengers[index];
+      inputs.id.value = p.id;
+      inputs.name.value = p.name;
+      inputs.passport.value = p.passport;
+      inputs.nationality.value = p.nationality;
+      inputs.email.value = p.email;
+      inputs.phone.value = p.phone;
+      inputs.flight.value = p.flight;
+      inputs.seat.value = p.seat;
+      inputs.status.value = p.status;
+      passengers.splice(index, 1);
+      localStorage.setItem("passengers", JSON.stringify(passengers));
       formSection.classList.remove("hidden");
-      formTitle.textContent = "Edit Passenger";
-      idField.value = p.id;
-      form.name.value = p.name;
-      form.passport.value = p.passport;
-      form.nationality.value = p.nationality;
-      form.email.value = p.email;
-      form.phone.value = p.phone;
-      form.flight.value = p.flight;
-      form.seat.value = p.seat;
-      form.status.value = p.status;
     }
-  };
+  });
 
-  window.deletePassenger = (id) => {
-    if (confirm("Delete this passenger?")) {
-      passengers = passengers.filter(p => p.id !== id);
-      renderPassengers();
-    }
-  };
+  // Fade-in animations
+  setTimeout(() => document.querySelectorAll(".fade-in").forEach(el => el.classList.add("visible")), 200);
 
   renderPassengers();
 });

@@ -3,14 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register | Skylinks</title>
+  <title>Register | SkyWings</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Takeoff animation overlay */
+    /* SkyWings Brand Colors */
+    :root {
+      --sky-blue: #0a5dd8;
+      --sky-light: #e8f2ff;
+      --sky-gold: #ffb400;
+      --sky-dark: #0a3a8c;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--sky-light), #d6eaff);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Helvetica', sans-serif;
+    }
+
+    /* Clouds */
+    .cloud {
+      position: absolute;
+      background: #ffffffcc;
+      border-radius: 50%;
+      opacity: 0.85;
+      animation: floatCloud 60s linear infinite;
+    }
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      background: #ffffffcc;
+      border-radius: 50%;
+    }
+    .cloud::before { width: 60%; height: 60%; top: -20%; left: 10%; }
+    .cloud::after { width: 70%; height: 70%; top: -10%; right: 10%; }
+    @keyframes floatCloud {
+      0% { transform: translateX(-200px); }
+      100% { transform: translateX(100vw); }
+    }
+
+    /* SkyWings Takeoff Overlay */
     #takeoff-screen {
       position: fixed;
       inset: 0;
-      background: linear-gradient(to top, #87ceeb, #ffffff);
+      background: linear-gradient(to top, var(--sky-light), var(--sky-blue));
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -20,7 +59,6 @@
       visibility: hidden;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-
     #takeoff-screen.active {
       opacity: 1;
       visibility: visible;
@@ -30,7 +68,6 @@
       width: 120px;
       animation: takeoff 3.5s ease-in-out forwards;
     }
-
     @keyframes takeoff {
       0% { transform: translateY(0) translateX(0) rotate(0deg); }
       50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
@@ -45,96 +82,90 @@
       margin-top: 20px;
       animation: zoomRunway 3.5s ease-in-out forwards;
     }
-
     @keyframes zoomRunway {
       from { transform: scaleX(1); opacity: 1; }
       to { transform: scaleX(2); opacity: 0; }
     }
+
+    /* Card Fade In */
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Input focus */
+    input:focus {
+      transform: scale(1.02);
+      border-color: var(--sky-blue);
+      box-shadow: 0 0 8px rgba(10, 93, 216, 0.4);
+    }
   </style>
 </head>
-<body class="bg-gradient-to-br from-sky-200 to-blue-400 min-h-screen flex items-center justify-center py-10">
+<body>
 
-  <!-- Register Box -->
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center">
-    <h1 class="text-3xl font-bold text-blue-700 mb-2">Create Account</h1>
-    <p class="text-gray-600 text-sm mb-6">Join Skylinks and start booking flights</p>
+  <!-- Floating Clouds -->
+  <div class="cloud" style="width:120px;height:60px;top:15%;left:-100px;animation-duration:60s;"></div>
+  <div class="cloud" style="width:180px;height:80px;top:40%;left:-150px;animation-duration:70s;"></div>
+  <div class="cloud" style="width:150px;height:70px;top:65%;left:-200px;animation-duration:90s;"></div>
 
-    <form id="register-form" class="space-y-4">
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
-        <input type="text" id="fullname" placeholder="John Doe" required
-               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
+  <!-- Register Card -->
+  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center fade-in relative z-10">
+    <img src="../assets/skywings-logo.png" alt="SkyWings Logo" class="mx-auto w-20 mb-4">
+    <h1 class="text-3xl font-bold text-[var(--sky-blue)] mb-2">Create Account</h1>
+    <p class="text-gray-700 text-sm mb-6">Join SkyWings and start booking flights</p>
+
+    <form id="register-form" class="space-y-4 text-left">
+      <label>Full Name</label>
+      <input type="text" id="fullname" placeholder="John Doe" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+
+      <label>Email</label>
+      <input type="email" id="email" placeholder="your@email.com" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+
+      <label>Password</label>
+      <input type="password" id="password" placeholder="At least 8 characters" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+
+      <label>Confirm Password</label>
+      <input type="password" id="confirm-password" placeholder="Confirm password" required
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+
+      <label>Register As</label>
+      <div class="flex justify-between mb-2">
+        <label class="flex items-center"><input type="radio" name="role" value="client" class="mr-2" required /> Client</label>
+        <label class="flex items-center"><input type="radio" name="role" value="admin" class="mr-2" /> Admin</label>
       </div>
 
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-        <input type="email" id="email" placeholder="your@email.com" required
-               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
-      </div>
-
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
-        <input type="tel" id="phone" placeholder="+1 (555) 000-0000" required
-               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
-      </div>
-
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
-        <input type="password" id="password" placeholder="At least 8 characters" required
-               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
-      </div>
-
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
-        <input type="password" id="confirm-password" placeholder="Confirm password" required
-               class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
-      </div>
-
-      <div class="text-left">
-        <label class="block text-sm font-semibold text-gray-700 mb-3">Register As</label>
-        <div class="flex justify-between">
-          <label class="flex items-center text-sm text-gray-700">
-            <input type="radio" name="role" value="client" required class="mr-2" />
-            Client
-          </label>
-          <label class="flex items-center text-sm text-gray-700">
-            <input type="radio" name="role" value="admin" class="mr-2" />
-            Admin
-          </label>
-        </div>
-      </div>
-
-      <div class="text-left flex items-center">
+      <div class="flex items-center mb-4">
         <input type="checkbox" id="terms" required class="mr-2" />
-        <label for="terms" class="text-sm text-gray-700">
-          I agree to the <span class="text-blue-600 hover:underline cursor-pointer">Terms and Conditions</span>
-        </label>
+        <label for="terms" class="text-sm text-gray-700">I agree to the <span class="text-[var(--sky-blue)] hover:underline cursor-pointer">Terms & Conditions</span></label>
       </div>
 
       <button type="submit"
-              class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-all font-semibold">
+              class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-blue-800 transition-all font-semibold">
         Create Account
       </button>
     </form>
 
     <p id="error-message" class="text-red-500 mt-4 hidden"></p>
 
-    <!-- Back to Login -->
-    <div class="mt-6">
-      <p class="text-sm text-gray-700">
-        Already have an account?
-        <a href="login.html" class="text-blue-600 hover:underline font-semibold">
-          Sign In
-        </a>
-      </p>
-    </div>
+    <p class="text-sm text-gray-700 mt-4">
+      Already have an account?
+      <a href="login.html" class="text-[var(--sky-blue)] hover:underline font-semibold">Sign In</a>
+    </p>
   </div>
 
   <!-- ✈️ Takeoff Animation Overlay -->
   <div id="takeoff-screen">
-    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
+    <img src="../assets/skywings-plane.png" alt="Plane" class="plane-icon" />
     <div class="runway"></div>
-    <p class="mt-6 text-lg font-semibold text-gray-700">Registering... please wait</p>
+    <p class="mt-6 text-lg font-semibold text-white">Registering... please wait</p>
   </div>
 
   <script>
@@ -154,7 +185,6 @@
         const role = document.querySelector('input[name="role"]:checked')?.value;
         const termsAccepted = document.getElementById("terms").checked;
 
-        // Validation
         if (!fullname || !email || !phone || !password || !confirmPassword || !role) {
           errorMsg.textContent = "Please fill in all fields and select a role.";
           errorMsg.classList.remove("hidden");
@@ -162,7 +192,7 @@
         }
 
         if (password.length < 8) {
-          errorMsg.textContent = "Password must be at least 8 characters long.";
+          errorMsg.textContent = "Password must be at least 8 characters.";
           errorMsg.classList.remove("hidden");
           return;
         }
@@ -174,22 +204,17 @@
         }
 
         if (!termsAccepted) {
-          errorMsg.textContent = "Please accept the Terms and Conditions.";
+          errorMsg.textContent = "Please accept Terms & Conditions.";
           errorMsg.classList.remove("hidden");
           return;
         }
 
-        // If validation passes, show takeoff animation and redirect
         errorMsg.classList.add("hidden");
         takeoffScreen.classList.add("active");
 
-        // Redirect to search page after animation
-        setTimeout(() => {
-          window.location.href = "./search.html";
-        }, 3500);
+        setTimeout(() => { window.location.href = "./search.html"; }, 3500);
       });
     });
   </script>
-
 </body>
 </html>

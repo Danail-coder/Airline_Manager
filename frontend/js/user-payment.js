@@ -1,46 +1,57 @@
+// ../js/user-payment.js
+
 document.addEventListener("DOMContentLoaded", () => {
   const ticketDetails = document.getElementById("ticket-details");
-  const ticketId = document.getElementById("ticket-id");
-  const selectedFlight = JSON.parse(localStorage.getItem("selectedFlight"));
+  const ticketIdEl = document.getElementById("ticket-id");
+  const paymentForm = document.getElementById("payment-form");
+  const paymentMethod = document.getElementById("payment-method");
+  const errorMessage = document.getElementById("error-message");
+  const takeoffScreen = document.getElementById("takeoff-screen");
 
-  if (!selectedFlight) {
-    ticketDetails.innerHTML = `<p class="text-red-600 text-center">No booking data found. Please go back to booking.</p>`;
+  // Load booking details
+  const bookingDetails = JSON.parse(localStorage.getItem("bookingDetails"));
+  if (!bookingDetails) {
+    ticketDetails.innerHTML = `<p class="text-gray-500">No booking details found. Go back to search.</p>`;
     return;
   }
 
-  // Generate random ticket number
-  ticketId.textContent = Math.floor(100000 + Math.random() * 900000);
+  // Generate random ticket ID
+  const ticketId = Math.floor(1000 + Math.random() * 9000);
+  ticketIdEl.textContent = ticketId;
 
-  // Display ticket details
+  // Populate ticket info
+  const { flight, passenger } = bookingDetails;
   ticketDetails.innerHTML = `
-    <p><strong>Flight:</strong> ${selectedFlight.from} → ${selectedFlight.to}</p>
-    <p><strong>Date:</strong> ${selectedFlight.date}</p>
-    <p><strong>Class:</strong> ${selectedFlight.class}</p>
-    <p><strong>Passenger:</strong> ${selectedFlight.passenger}</p>
-    <p><strong>Email:</strong> ${selectedFlight.email || "—"}</p>
-    <p><strong>Phone:</strong> ${selectedFlight.phone}</p>
-    <p class="font-semibold text-blue-700 mt-2 text-lg">
-      Total Fare: $${selectedFlight.price}
-    </p>
+    <p><strong>Passenger:</strong> ${passenger.passenger}</p>
+    <p><strong>Email:</strong> ${passenger.email || "N/A"}</p>
+    <p><strong>Phone:</strong> ${passenger.phone}</p>
+    <p><strong>From:</strong> ${flight.from}</p>
+    <p><strong>To:</strong> ${flight.to}</p>
+    <p><strong>Date:</strong> ${flight.date}</p>
+    <p><strong>Time:</strong> ${flight.time}</p>
+    <p><strong>Seats:</strong> ${flight.seats}</p>
   `;
 
   // Handle payment submission
-  const paymentForm = document.getElementById("payment-form");
   paymentForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    const method = paymentMethod.value;
 
-    const method = document.getElementById("payment-method").value;
     if (!method) {
-      alert("Please select a payment method.");
+      errorMessage.textContent = "Please select a payment method.";
+      errorMessage.classList.remove("hidden");
       return;
     }
 
-    // Simulate payment process
-    alert(`Payment successful via ${method.toUpperCase()}!`);
-    selectedFlight.paymentMethod = method;
-    selectedFlight.ticketId = ticketId.textContent;
+    errorMessage.classList.add("hidden");
 
-    localStorage.setItem("selectedFlight", JSON.stringify(selectedFlight));
-    window.location.href = "confirmation.html";
+    // Show takeoff overlay
+    takeoffScreen.classList.add("active");
+
+    // Simulate payment processing
+    setTimeout(() => {
+      localStorage.setItem("ticketId", ticketId); // save ticket
+      window.location.href = "confirmation.html";
+    }, 3500);
   });
 });

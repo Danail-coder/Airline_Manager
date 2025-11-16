@@ -3,39 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Skylinks | Flight Results</title>
+  <title>SkyWings | Flight Results</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --sky-blue: #0a5dd8;
+      --sky-light: #e8f2ff;
+      --sky-gold: #ffb400;
+      --sky-dark: #0a3a8c;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--sky-light), #d6eaff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+      font-family: 'Helvetica', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 2xl;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 10;
+    }
+
+    nav a {
+      color: var(--sky-blue);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a.underline {
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* Sky animation */
+    .sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 220px;
+      overflow: visible;
+      z-index: 0;
+    }
+
+    .clouds ellipse {
+      animation: moveClouds linear infinite;
+    }
+
+    .clouds ellipse:nth-child(1) { animation-duration: 80s; }
+    .clouds ellipse:nth-child(2) { animation-duration: 100s; }
+    .clouds ellipse:nth-child(3) { animation-duration: 70s; }
+    .clouds ellipse:nth-child(4) { animation-duration: 90s; }
+
+    @keyframes moveClouds {
+      from { transform: translateX(0); }
+      to { transform: translateX(-1400px); }
+    }
+
+    .plane {
+      animation: fly 20s linear infinite;
+    }
+
+    .plane-1 { animation-delay: 0s; }
+    .plane-2 { animation-delay: 4s; }
+    .plane-3 { animation-delay: 8s; }
+
+    @keyframes fly {
+      0% { transform: translateX(-300px); }
+      100% { transform: translateX(1300px); }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+<body>
 
-  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl">
-    <h1 class="text-2xl font-bold text-blue-700 mb-4 text-center">Passenger Information</h1>
-    <nav class="space-x-4 text-sm">
-        <a href="search.html" class="hover:underline">Search</a>
-        <a href="results.html" class="hover:underline">Results</a>
-        <a href="booking.html" class="hover:underline">Booking</a>
-        <a href="user-payment.html" class="underline font-semibold">Payment</a>
-        <a href="confirmation.html" class="hover:underline">Confirmation</a>
-        <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
-        </nav>
+  <div class="card">
+    <h1 class="text-2xl font-bold text-[var(--sky-blue)] mb-4 text-center">Passenger Information</h1>
+    
+    <nav class="flex justify-center space-x-4 text-sm mb-6">
+      <a href="search.html" class="hover:underline">Search</a>
+      <a href="results.html" class="underline font-semibold">Results</a>
+      <a href="booking.html" class="hover:underline">Booking</a>
+      <a href="user-payment.html" class="hover:underline">Payment</a>
+      <a href="confirmation.html" class="hover:underline">Confirmation</a>
+      <a href="login.html" class="text-red-500 hover:underline">Logout</a>
+    </nav>
 
-    <!-- decorative animated sky (SVG) -->
+    <!-- Sky Animation -->
     <div class="sky" aria-hidden="true">
-      <!-- inline SVG with simple plane and cloud animations -->
-      <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stop-color="#eaf3ff" />
-            <stop offset="100%" stop-color="#d6eaff" />
-          </linearGradient>
           <g id="plane">
             <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
             <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
           </g>
         </defs>
 
-        <!-- moving clouds -->
         <g class="clouds" fill="#ffffff" opacity="0.9">
           <ellipse cx="1200" cy="40" rx="90" ry="22" />
           <ellipse cx="1000" cy="70" rx="60" ry="18" />
@@ -43,17 +115,16 @@
           <ellipse cx="600" cy="60" rx="110" ry="26" />
         </g>
 
-        <!-- repeated planes with different speeds -->
         <use href="#plane" class="plane plane-1" x="-260" y="40" />
         <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
         <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
       </svg>
     </div>
 
-    <div id="flight-results" class="space-y-4"></div>
+    <div id="flight-results" class="space-y-4 mt-4"></div>
 
     <div class="mt-6 text-center">
-      <button onclick="window.location.href='search.html'" class="text-blue-600 hover:underline">
+      <button onclick="window.location.href='search.html'" class="text-[var(--sky-blue)] hover:underline font-semibold">
         ⬅ Back to Search
       </button>
     </div>

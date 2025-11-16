@@ -1,3 +1,5 @@
+// ../js/search.js
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("search-form");
 
@@ -9,17 +11,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = document.getElementById("date").value;
     const travelClass = document.getElementById("class").value;
 
-    if (!from || !to || !date) {
-      alert("Please fill all fields.");
+    // Basic validation
+    if (!from || !to || !date || !travelClass) {
+      alert("Please fill in all search fields.");
       return;
     }
 
-    const searchData = { from, to, date, class: travelClass };
+    if (from.toLowerCase() === to.toLowerCase()) {
+      alert("Departure and destination cannot be the same.");
+      return;
+    }
 
-    // Save to localStorage
-    localStorage.setItem("searchData", JSON.stringify(searchData));
+    // Save search query to localStorage
+    const searchQuery = { from, to, date, travelClass };
+    localStorage.setItem("skywingsSearchQuery", JSON.stringify(searchQuery));
 
     // Redirect to results page
-    window.location.href = "results.html";
+    window.location.href = "./results.html";
   });
 });

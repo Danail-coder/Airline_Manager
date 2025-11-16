@@ -1,50 +1,74 @@
+// ../js/results.js
+
 document.addEventListener("DOMContentLoaded", () => {
-  const flightContainer = document.getElementById("flight-results");
-  const searchData = JSON.parse(localStorage.getItem("searchData"));
+  const resultsContainer = document.getElementById("flight-results");
 
-  if (!searchData) {
-    flightContainer.innerHTML = `<p class="text-center text-red-600">No search data found. Please go back and search again.</p>`;
-    return;
-  }
-
-  // Example mock flight data (normally from backend)
+  // Mock flight results data
   const flights = [
-    { airline: "AeroConnect Air", time: "08:00 AM", fare: 250 },
-    { airline: "SkyLink Express", time: "11:30 AM", fare: 275 },
-    { airline: "BlueJet Airlines", time: "03:45 PM", fare: 300 }
+    {
+      airline: "SkyWings Airlines",
+      flightNo: "SW123",
+      from: "Accra",
+      to: "London",
+      departure: "2025-12-01 08:00",
+      arrival: "2025-12-01 16:00",
+      duration: "8h",
+      price: 1200
+    },
+    {
+      airline: "SkyWings Airlines",
+      flightNo: "SW456",
+      from: "Accra",
+      to: "London",
+      departure: "2025-12-01 14:00",
+      arrival: "2025-12-01 22:00",
+      duration: "8h",
+      price: 1150
+    },
+    {
+      airline: "Global Air",
+      flightNo: "GA789",
+      from: "Accra",
+      to: "London",
+      departure: "2025-12-01 20:00",
+      arrival: "2025-12-02 04:00",
+      duration: "8h",
+      price: 1300
+    }
   ];
 
-  flightContainer.innerHTML = flights.map((f, index) => `
-    <div class="border border-gray-300 rounded-lg p-4 flex justify-between items-center hover:shadow-md transition">
-      <div>
-        <h2 class="font-semibold text-lg text-gray-800">${f.airline}</h2>
-        <p class="text-gray-600">${searchData.from} → ${searchData.to}</p>
-        <p class="text-sm text-gray-500">${searchData.date} | ${searchData.class}</p>
-        <p class="font-bold text-blue-700 mt-1">$${f.fare}</p>
+  // Render flights
+  flights.forEach(flight => {
+    const flightCard = document.createElement("div");
+    flightCard.className = "p-4 border border-gray-200 rounded-lg hover:shadow-md transition";
+
+    flightCard.innerHTML = `
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="font-semibold text-[var(--sky-blue)]">${flight.airline} - ${flight.flightNo}</h3>
+        <span class="font-bold text-gray-700">$${flight.price}</span>
       </div>
-      <button onclick="bookFlight(${index})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
-        Book Now
-      </button>
-    </div>
-  `).join("");
+      <div class="grid grid-cols-2 gap-2 text-sm text-gray-600">
+        <div><strong>From:</strong> ${flight.from}</div>
+        <div><strong>To:</strong> ${flight.to}</div>
+        <div><strong>Departure:</strong> ${flight.departure}</div>
+        <div><strong>Arrival:</strong> ${flight.arrival}</div>
+        <div><strong>Duration:</strong> ${flight.duration}</div>
+      </div>
+      <div class="mt-3 text-right">
+        <button onclick="bookFlight('${flight.flightNo}')" class="bg-[var(--sky-blue)] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+          Book
+        </button>
+      </div>
+    `;
+
+    resultsContainer.appendChild(flightCard);
+  });
 });
 
-function bookFlight(index) {
-  const searchData = JSON.parse(localStorage.getItem("searchData"));
-  const flights = [
-    { airline: "AeroConnect Air", time: "08:00 AM", fare: 250 },
-    { airline: "SkyLink Express", time: "11:30 AM", fare: 275 },
-    { airline: "BlueJet Airlines", time: "03:45 PM", fare: 300 }
-  ];
-  const selectedFlight = flights[index];
-
-  const flightData = {
-    ...searchData,
-    airline: selectedFlight.airline,
-    time: selectedFlight.time,
-    price: selectedFlight.fare
-  };
-
-  localStorage.setItem("selectedFlight", JSON.stringify(flightData));
+// Mock function to handle booking click
+function bookFlight(flightNo) {
+  // Save flight info in localStorage to pass to booking page
+  localStorage.setItem("selectedFlight", flightNo);
+  // Redirect to booking page
   window.location.href = "booking.html";
 }

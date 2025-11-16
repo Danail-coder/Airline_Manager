@@ -1,44 +1,53 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const summaryDiv = document.getElementById("flight-summary");
-  const selectedFlight = JSON.parse(localStorage.getItem("selectedFlight"));
+// ../js/booking.js
 
-  if (!selectedFlight) {
-    summaryDiv.innerHTML = `<p class="text-red-600 text-center">No flight selected. Please go back to search.</p>`;
-    return;
+document.addEventListener("DOMContentLoaded", () => {
+  const flightSummary = document.getElementById('flight-summary');
+  const bookingForm = document.getElementById('booking-form');
+
+  // Load selected flight data from localStorage
+  const flightData = JSON.parse(localStorage.getItem('selectedFlight'));
+
+  if (flightData) {
+    flightSummary.innerHTML = `
+      <h2 class="font-semibold text-lg mb-2">Flight Summary</h2>
+      <p><strong>From:</strong> ${flightData.from}</p>
+      <p><strong>To:</strong> ${flightData.to}</p>
+      <p><strong>Date:</strong> ${flightData.date || flightData.departure}</p>
+      <p><strong>Time:</strong> ${flightData.time || flightData.departure}</p>
+      <p><strong>Seats:</strong> ${flightData.seats || 1}</p>
+      <p><strong>Flight No:</strong> ${flightData.flightNo || flightData}</p>
+    `;
+  } else {
+    flightSummary.innerHTML = `<p class="text-gray-500">No flight selected yet.</p>`;
   }
 
-  // Display flight summary
-  summaryDiv.innerHTML = `
-    <p><strong>Airline:</strong> ${selectedFlight.airline}</p>
-    <p><strong>Route:</strong> ${selectedFlight.from} → ${selectedFlight.to}</p>
-    <p><strong>Date:</strong> ${selectedFlight.date}</p>
-    <p><strong>Time:</strong> ${selectedFlight.time}</p>
-    <p><strong>Class:</strong> ${selectedFlight.class}</p>
-    <p><strong>Fare:</strong> $${selectedFlight.price}</p>
-  `;
-
   // Handle form submission
-  const form = document.getElementById("booking-form");
-  form.addEventListener("submit", (e) => {
+  bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const passenger = document.getElementById("passenger").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    const passenger = document.getElementById('passenger').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
 
     if (!passenger || !phone) {
-      alert("Please fill in all required fields.");
+      alert('Please fill in all required fields.');
       return;
     }
 
-    // Update booking data
-    selectedFlight.passenger = passenger;
-    selectedFlight.email = email;
-    selectedFlight.phone = phone;
+    // Save passenger info in localStorage
+    const passengerInfo = { passenger, email, phone };
+    localStorage.setItem('passengerInfo', JSON.stringify(passengerInfo));
 
-    localStorage.setItem("selectedFlight", JSON.stringify(selectedFlight));
+    // Optional: combine flight + passenger info for payment
+    const bookingDetails = {
+      flight: flightData,
+      passenger: passengerInfo
+    };
+    localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
 
-    // Go to payment
-    window.location.href = "user-payment.html";
+    alert('Booking confirmed! ✈️');
+
+    // Redirect to payment page
+    window.location.href = 'user-payment.html';
   });
 });

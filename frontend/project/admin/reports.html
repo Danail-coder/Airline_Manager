@@ -3,68 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reports | Skylink Manager</title>
+  <title>SkyWings | Reports</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+      --green: #34d399;
+      --yellow: #facc15;
+      --purple: #a78bfa;
+    }
+
+    body { background-color: var(--gray); }
+    .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="font-sans flex">
 
   <!-- Sidebar -->
-  <aside class="w-64 bg-blue-800 text-white h-screen p-5 fixed z-10">
+  <aside class="w-64 bg-deep-blue text-white h-screen p-5 fixed z-10">
+    <img src="https://cdn-icons-png.flaticon.com/512/804/804920.png" alt="SkyWings Logo" class="w-24 mb-8">
     <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
     <nav class="flex flex-col gap-3">
-      <a href="dashboard.html" class="hover:bg-blue-700 p-2 rounded">🏠 Dashboard</a>
-      <a href="flights.html" class="bg-blue-700 p-2 rounded">✈️ Flights</a>
-      <a href="passengers.html" class="hover:bg-blue-700 p-2 rounded">🧍 Passengers</a>
-      <a href="staff.html" class="hover:bg-blue-700 p-2 rounded">👨‍✈️ Crew / Staff</a>
-      <a href="maintenance.html" class="hover:bg-blue-700 p-2 rounded">🔧 Maintenance</a>
-      <a href="reports.html" class="hover:bg-blue-700 p-2 rounded">📊 Reports</a>
-      <a href="settings.html" class="hover:bg-blue-700 p-2 rounded">⚙️ System</a>
-      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mx-3">Logout</a>       
+      <a href="dashboard.html" class="hover:bg-sky-blue p-2 rounded">🏠 Dashboard</a>
+      <a href="flights.html" class="hover:bg-sky-blue p-2 rounded">✈️ Flights</a>
+      <a href="passengers.html" class="hover:bg-sky-blue p-2 rounded">🧍 Passengers</a>
+      <a href="staff.html" class="hover:bg-sky-blue p-2 rounded">👨‍✈️ Crew / Staff</a>
+      <a href="maintenance.html" class="hover:bg-sky-blue p-2 rounded">🔧 Maintenance</a>
+      <a href="reports.html" class="bg-sky-blue p-2 rounded">📊 Reports</a>
+      <a href="settings.html" class="hover:bg-sky-blue p-2 rounded">⚙️ System</a>
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline mt-6">Logout</a>
     </nav>
   </aside>
 
   <!-- Main Content -->
-  <main class="ml-64 flex-1 container p-6 bg-gray-100 min-h-screen">
+  <main class="ml-64 flex-1 container p-6 min-h-screen">
+
     <section class="grid md:grid-cols-2 gap-8">
 
       <!-- Revenue Chart -->
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Monthly Revenue</h2>
+      <div class="bg-white p-6 rounded-xl shadow-md fade-in">
+        <h2 class="text-xl font-semibold mb-4 text-deep-blue">Monthly Revenue</h2>
         <canvas id="revenueChart" height="200"></canvas>
       </div>
 
       <!-- Flights Chart -->
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Flights Per Route</h2>
+      <div class="bg-white p-6 rounded-xl shadow-md fade-in">
+        <h2 class="text-xl font-semibold mb-4 text-deep-blue">Flights Per Route</h2>
         <canvas id="flightsChart" height="200"></canvas>
       </div>
 
       <!-- Summary Stats -->
-      <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2">
-        <h2 class="text-xl font-semibold mb-4 text-gray-700">Summary Overview</h2>
+      <div class="bg-white p-6 rounded-xl shadow-md md:col-span-2 fade-in">
+        <h2 class="text-xl font-semibold mb-4 text-deep-blue">Summary Overview</h2>
         <ul class="grid md:grid-cols-4 gap-4 text-center">
-          <li class="bg-blue-100 p-4 rounded-lg">
-            <p class="text-gray-600">Total Flights</p>
-            <h3 class="text-2xl font-bold text-blue-700">1,230</h3>
+          <li class="bg-sky-blue-light p-4 rounded-lg text-white">
+            <p>Total Flights</p>
+            <h3 class="text-2xl font-bold">1,230</h3>
           </li>
-          <li class="bg-green-100 p-4 rounded-lg">
-            <p class="text-gray-600">Tickets Sold</p>
-            <h3 class="text-2xl font-bold text-green-700">8,420</h3>
+          <li class="bg-green p-4 rounded-lg text-white">
+            <p>Tickets Sold</p>
+            <h3 class="text-2xl font-bold">8,420</h3>
           </li>
-          <li class="bg-yellow-100 p-4 rounded-lg">
-            <p class="text-gray-600">Revenue</p>
-            <h3 class="text-2xl font-bold text-yellow-700">$540K</h3>
+          <li class="bg-yellow p-4 rounded-lg text-white">
+            <p>Revenue</p>
+            <h3 class="text-2xl font-bold">$540K</h3>
           </li>
-          <li class="bg-purple-100 p-4 rounded-lg">
-            <p class="text-gray-600">Active Routes</p>
-            <h3 class="text-2xl font-bold text-purple-700">38</h3>
+          <li class="bg-purple p-4 rounded-lg text-white">
+            <p>Active Routes</p>
+            <h3 class="text-2xl font-bold">38</h3>
           </li>
         </ul>
       </div>
     </section>
+
   </main>
 
-  <script src="js/reports.js"></script>
+  <script src="../js/reports.js"></script>
+  <script>
+    // Fade-in animation
+    setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 200);
+  </script>
 </body>
 </html>
