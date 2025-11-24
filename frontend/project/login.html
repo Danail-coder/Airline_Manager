@@ -1,100 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Login | SkyWings</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root {
-    --sky-blue: #1a73e8;
-    --sky-blue-light: #52a8ff;
-    --deep-blue: #0d1a3a;
-    --white: #ffffff;
-    --gray: #e8eef5;
-    --sky-gold: #ffb400;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | SkyWings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, var(--sky-blue-light), var(--sky-blue));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-  }
+    body {
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-  /* Fade-in */
-  .fade-in { animation: fadeIn 0.9s ease-in-out; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    /* --- Top-left Logo --- */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      z-index: 20;
+      width: 65px;
+    }
 
-  /* Takeoff Animation Overlay */
-  #takeoff-screen {
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(to top, var(--sky-blue-light), var(--sky-blue));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-  }
-  #takeoff-screen.active { opacity: 1; visibility: visible; }
-  .plane-icon {
-    width: 120px;
-    animation: takeoff 3.5s ease-in-out forwards;
-  }
-  @keyframes takeoff {
-    0% { transform: translateY(0) translateX(0) rotate(0deg); }
-    50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
-    100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
-  }
-  .runway {
-    width: 80%;
-    height: 8px;
-    background: repeating-linear-gradient(90deg, #333 0 20px, #666 20px 40px);
-    border-radius: 4px;
-    margin-top: 20px;
-    animation: zoomRunway 3.5s ease-in-out forwards;
-  }
-  @keyframes zoomRunway { from { transform: scaleX(1); opacity: 1; } to { transform: scaleX(2); opacity: 0; } }
+    /* --- White Card --- */
+    .card {
+      background: var(--white);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+    }
 
-  /* Inputs */
-  input:focus { transform: scale(1.02); box-shadow: 0 0 8px rgba(26, 115, 232,0.4); border-color: var(--sky-blue); transition: 0.25s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-  /* Buttons */
-  button {
-    transition: all 0.3s ease;
-  }
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  }
+    /* --- Cloud Animation --- */
+    .sky-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  /* Radio buttons */
-  input[type="radio"] {
-    accent-color: var(--sky-blue);
-  }
-</style>
+    .cloud {
+      opacity: 0.85;
+      animation: cloudMove linear infinite;
+    }
+
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(130%); }
+      to   { transform: translateX(-150%); }
+    }
+
+    /* --- Animated Planes --- */
+    .plane {
+      animation: planeFly 14s linear infinite;
+    }
+
+    .plane-1 { animation-delay: 0s; transform: scale(1); }
+    .plane-2 { animation-delay: 5s; transform: scale(0.85); }
+    .plane-3 { animation-delay: 9s; transform: scale(0.7); }
+
+    @keyframes planeFly {
+      0%   { transform: translateX(-150px) translateY(0) scale(var(--scale)); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
+    }
+
+    input, select {
+      transition: 0.25s ease-in-out;
+    }
+    input:focus, select:focus {
+      transform: scale(1.02);
+      border-color: var(--sky-blue);
+      box-shadow: 0 0 8px rgba(26,115,232,0.4);
+      outline: none;
+    }
+
+    button {
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Takeoff animation overlay */
+    #takeoff-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to top, #87ceeb, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #takeoff-screen.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .plane-icon {
+      width: 120px;
+      animation: takeoff 3.5s ease-in-out forwards;
+    }
+
+    @keyframes takeoff {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
+      100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
+    }
+
+    .runway {
+      width: 80%;
+      height: 8px;
+      background: repeating-linear-gradient(90deg, #333 0 20px, #666 20px 40px);
+      border-radius: 4px;
+      margin-top: 20px;
+      animation: zoomRunway 3.5s ease-in-out forwards;
+    }
+
+    @keyframes zoomRunway {
+      from { transform: scaleX(1); opacity: 1; }
+      to { transform: scaleX(2); opacity: 0; }
+    }
+  </style>
 </head>
+
 <body>
 
-  <!-- Login Box -->
-  <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md text-center fade-in">
-    <h1 class="text-3xl font-bold text-[var(--deep-blue)] mb-6">SkyWings Sign In</h1>
+  <!-- Logo -->
+  <img src="../assets/logo.png" class="logo" alt="SkyWings Logo">
+
+  <!-- Sky Animation -->
+  <div class="sky-container">
+    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Clouds -->
+      <ellipse cx="1400" cy="60" rx="110" ry="28" fill="white" class="cloud cloud-large" />
+      <ellipse cx="1300" cy="120" rx="70" ry="20" fill="white" class="cloud cloud-medium" />
+      <ellipse cx="1600" cy="90" rx="50" ry="16" fill="white" class="cloud cloud-small" />
+
+      <!-- Planes -->
+      <g id="plane">
+        <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"></path>
+        <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"></rect>
+      </g>
+
+      <use href="#plane" class="plane plane-1" x="-200" y="40"/>
+      <use href="#plane" class="plane plane-2" x="-350" y="110"/>
+      <use href="#plane" class="plane plane-3" x="-500" y="20"/>
+    </svg>
+  </div>
+
+  <!-- Login Card -->
+  <div class="card">
+    <h1 class="text-3xl font-bold text-[var(--sky-blue)] mb-6 text-center">Sign In</h1>
 
     <form id="login-form" class="space-y-4">
       <input type="email" id="email" placeholder="Email" required
-             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
       <input type="password" id="password" placeholder="Password" required
-             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-[var(--sky-blue)]" />
+             class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500" />
 
       <div class="flex justify-between mt-4 text-sm text-gray-600">
         <label><input type="radio" name="role" value="admin" required> Admin</label>
@@ -102,7 +201,7 @@
       </div>
 
       <button type="submit"
-              class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-[var(--deep-blue)] transition-all">
+              class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-blue-700 transition-all">
         Login
       </button>
     </form>
@@ -121,7 +220,7 @@
         Don't have an account?
       </p>
       <a href="register.html"
-         class="w-full block bg-[var(--sky-gold)] text-white py-3 rounded-md hover:bg-yellow-600 transition-all text-center font-semibold">
+         class="w-full block bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-all text-center font-semibold">
         Create New Account
       </a>
     </div>
@@ -129,9 +228,9 @@
 
   <!-- ✈️ Takeoff Animation Overlay -->
   <div id="takeoff-screen">
-    <img src="../assets/logo.png" alt="Plane" class="plane-icon" />
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
     <div class="runway"></div>
-    <p class="mt-6 text-lg font-semibold text-[var(--deep-blue)]">Taking off... please wait</p>
+    <p class="mt-6 text-lg font-semibold text-gray-700">Taking off... please wait</p>
   </div>
 
   <script src="../js/login.js"></script>

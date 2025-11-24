@@ -13,7 +13,109 @@
       --white: #ffffff;
       --gray: #e8eef5;
     }
-    body { background-color: var(--gray); }
+    body {
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      margin: 0;
+      display: flex;
+    }
+    /* Logo top-left */
+    .logo-top {
+      position: fixed;
+      top: 20px;
+      left: 25px;
+      z-index: 30;
+      width: 65px;
+    }
+
+    /* Sky background with clouds and planes */
+    .sky-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .cloud {
+      opacity: 0.85;
+      animation: cloudMove linear infinite;
+    }
+
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(130%); }
+      to   { transform: translateX(-150%); }
+    }
+
+    .plane {
+      animation: planeFly 14s linear infinite;
+    }
+
+    .plane-1 { animation-delay: 0s; transform: scale(1); }
+    .plane-2 { animation-delay: 5s; transform: scale(0.85); }
+    .plane-3 { animation-delay: 9s; transform: scale(0.7); }
+
+    @keyframes planeFly {
+      0%   { transform: translateX(-150px) translateY(0) scale(var(--scale)); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background-color: var(--deep-blue);
+      z-index: 20;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 256px;
+      height: 100vh;
+      padding: 1.25rem;
+      color: white;
+    }
+
+    .sidebar a.active { background-color: var(--sky-blue-light); }
+    
+    /* Main content area */
+    main {
+      margin-left: 256px;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      width: calc(100% - 256px);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease forwards; }
+    
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.2s; }
+    .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    .fade-in:nth-child(4) { animation-delay: 0.4s; }
     .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: translateY(0); }
     .input-field { border: 1px solid #ccc; padding: 0.5rem; border-radius: 0.5rem; transition: all 0.3s; }
@@ -24,12 +126,34 @@
 </head>
 <body class="font-sans flex">
 
+  <!-- Logo Top-Left -->
+  <img src="../../assets/logo.png" class="logo-top" alt="SkyWings Logo">
+
+  <!-- Sky Container with Clouds and Planes -->
+  <div class="sky-container">
+    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Clouds -->
+      <ellipse cx="1400" cy="60" rx="110" ry="28" fill="white" class="cloud cloud-large" />
+      <ellipse cx="1300" cy="120" rx="70" ry="20" fill="white" class="cloud cloud-medium" />
+      <ellipse cx="1600" cy="90" rx="50" ry="16" fill="white" class="cloud cloud-small" />
+
+      <!-- Planes -->
+      <g id="plane">
+        <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"></path>
+        <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"></rect>
+      </g>
+
+      <use href="#plane" class="plane plane-1" x="-200" y="40"/>
+      <use href="#plane" class="plane plane-2" x="-350" y="110"/>
+      <use href="#plane" class="plane plane-3" x="-500" y="20"/>
+    </svg>
+  </div>
   <!-- Sidebar -->
-  <aside class="w-64 bg-deep-blue text-white h-screen p-5 fixed sidebar">
+  <aside class="sidebar">
     <img src="https://cdn-icons-png.flaticon.com/512/804/804920.png" alt="SkyWings Logo" class="w-24 mb-8">
     <h2 class="text-2xl font-bold mb-8">✈️ Admin Panel</h2>
     <nav class="flex flex-col gap-3">
-      <a href="dashboard.html" class="hover:bg-sky-blue p-2 rounded">🏠 Dashboard</a>
+      <a href="admin-dashboard.html" class="hover:bg-sky-blue p-2 rounded">🏠 Dashboard</a>
       <a href="flights.html" class="bg-sky-blue p-2 rounded active">✈️ Flights</a>
       <a href="passengers.html" class="hover:bg-sky-blue p-2 rounded">🧍 Passengers</a>
       <a href="staff.html" class="hover:bg-sky-blue p-2 rounded">👨‍✈️ Crew / Staff</a>
@@ -40,43 +164,10 @@
     </nav>
   </aside>
 
-  <!-- decorative animated sky (SVG) -->
-  <div class="sky absolute top-0 left-64 w-full h-52 z-0" aria-hidden="true">
-    <svg id="sky-svg" viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="skyGrad" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="#eaf3ff" />
-          <stop offset="100%" stop-color="#d6eaff" />
-        </linearGradient>
-        <g id="plane">
-          <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
-          <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
-        </g>
-      </defs>
-      <g class="clouds" fill="#ffffff" opacity="0.9">
-        <ellipse cx="1200" cy="40" rx="90" ry="22" />
-        <ellipse cx="1000" cy="70" rx="60" ry="18" />
-        <ellipse cx="850" cy="35" rx="70" ry="20" />
-        <ellipse cx="600" cy="60" rx="110" ry="26" />
-      </g>
-      <use href="#plane" class="plane plane-1" x="-260" y="40" />
-      <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
-      <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
-    </svg>
-  </div>
-
-  <!-- Main Content -->
-  <main class="ml-64 flex-1 p-6 relative z-10">
-    <header class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-semibold text-deep-blue">Manage Flights</h1>
-      <button id="add-flight-btn" class="btn-primary px-4 py-2 rounded">+ Add Flight</button>
-    </header>
-
-    <!-- Add/Edit Flight Form -->
-    <section id="flight-form-section" class="hidden mb-8 bg-white p-6 rounded-lg shadow fade-in">
-      <h2 class="text-xl font-semibold mb-4" id="form-title">Add New Flight</h2>
-      <form id="flight-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input type="hidden" id="flight-id">
+  <main>
+    <section class="card fade-in">
+      <h2 class="text-xl font-semibold mb-4 text-deep-blue">Add New Flight</h2>
+      <form class="grid md:grid-cols-2 gap-4">
         <div>
           <label class="block text-gray-600">From</label>
           <input id="from" type="text" class="input-field w-full" required />
@@ -114,7 +205,7 @@
     </section>
 
     <!-- Flights Table -->
-    <section class="bg-white p-6 rounded-lg shadow fade-in">
+    <section class="card fade-in">
       <h2 class="text-xl font-semibold mb-4 text-deep-blue">Flight List</h2>
       <table class="w-full text-left border border-gray-200">
         <thead class="bg-sky-blue-light text-white">

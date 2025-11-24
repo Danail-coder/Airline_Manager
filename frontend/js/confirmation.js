@@ -1,51 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const selectedFlight = JSON.parse(localStorage.getItem("selectedFlight"));
-  const ticketDetails = document.getElementById("ticket-details");
-  const ticketId = document.getElementById("ticket-id");
-  const paymentMethodDisplay = document.getElementById("payment-method-display");
+  const booking = JSON.parse(localStorage.getItem("selectedFlight"));
+  const passenger = JSON.parse(localStorage.getItem("passengerInfo"));
+  const payment = localStorage.getItem("paymentMethod");
 
-  if (!selectedFlight) {
-    ticketDetails.innerHTML = `<p class="text-red-600 text-center">No booking data found. Please go back to booking.</p>`;
+  if (!booking || !passenger || !payment) {
+    alert("Missing booking information. Please start again.");
+    window.location.href = "search.html";
     return;
   }
 
-  ticketId.textContent = selectedFlight.ticketId || Math.floor(100000 + Math.random() * 900000);
+  // Generate ticket ID
+  const ticketID = "SKY-" + Math.floor(Math.random() * 900000 + 100000);
 
-  ticketDetails.innerHTML = `
-    <p><strong>Flight:</strong> ${selectedFlight.from} → ${selectedFlight.to}</p>
-    <p><strong>Date:</strong> ${selectedFlight.date}</p>
-    <p><strong>Class:</strong> ${selectedFlight.class}</p>
-    <p><strong>Passenger:</strong> ${selectedFlight.passenger}</p>
-    <p><strong>Email:</strong> ${selectedFlight.email || "—"}</p>
-    <p><strong>Phone:</strong> ${selectedFlight.phone}</p>
-    <p class="font-semibold text-blue-700 mt-2 text-lg">Total Fare: $${selectedFlight.price}</p>
-  `;
+  // Display in DOM
+  document.getElementById("passenger-name").textContent = passenger.name;
+  document.getElementById("passenger-email").textContent = passenger.email;
 
-  if (selectedFlight.paymentMethod) {
-    paymentMethodDisplay.textContent = `Paid via: ${selectedFlight.paymentMethod.toUpperCase()}`;
-  }
+  document.getElementById("from").textContent = booking.from;
+  document.getElementById("to").textContent = booking.to;
+  document.getElementById("date").textContent = booking.date;
+  document.getElementById("time").textContent = booking.time;
+
+  document.getElementById("payment-method").textContent = payment;
+  document.getElementById("ticket-id").textContent = ticketID;
 
   // Download PDF
   document.getElementById("download-ticket").addEventListener("click", () => {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const pdf = new jsPDF();
 
-    doc.setFontSize(18);
-    doc.text("SkyWings Ticket", 20, 20);
+    pdf.setFontSize(18);
+    pdf.text("SkyWings Ticket Confirmation", 20, 20);
 
-    doc.setFontSize(12);
-    doc.text(`Ticket ID: #AERO${ticketId.textContent}`, 20, 35);
-    doc.text(`Passenger: ${selectedFlight.passenger}`, 20, 45);
-    doc.text(`Email: ${selectedFlight.email || "—"}`, 20, 55);
-    doc.text(`Phone: ${selectedFlight.phone}`, 20, 65);
-    doc.text(`Flight: ${selectedFlight.from} → ${selectedFlight.to}`, 20, 75);
-    doc.text(`Date: ${selectedFlight.date}`, 20, 85);
-    doc.text(`Class: ${selectedFlight.class}`, 20, 95);
-    doc.text(`Total Fare: $${selectedFlight.price}`, 20, 105);
-    if (selectedFlight.paymentMethod) {
-      doc.text(`Payment: ${selectedFlight.paymentMethod.toUpperCase()}`, 20, 115);
-    }
+    pdf.setFontSize(12);
+    pdf.text(`Ticket ID: ${ticketID}`, 20, 35);
+    pdf.text(`Passenger: ${passenger.name}`, 20, 45);
+    pdf.text(`Email: ${passenger.email}`, 20, 55);
+    pdf.text(`From: ${booking.from}`, 20, 75);
+    pdf.text(`To: ${booking.to}`, 20, 85);
+    pdf.text(`Date: ${booking.date}`, 20, 95);
+    pdf.text(`Time: ${booking.time}`, 20, 105);
+    pdf.text(`Payment Method: ${payment}`, 20, 115);
 
-    doc.save(`SkyWingsTicket_${ticketId.textContent}.pdf`);
+    pdf.save("SkyWings_Ticket.pdf");
   });
 });

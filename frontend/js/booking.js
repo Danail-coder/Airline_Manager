@@ -1,27 +1,27 @@
-// ../js/booking.js
+// -----------------------------
+// SkyWings Booking JS
+// -----------------------------
+document.addEventListener('DOMContentLoaded', () => {
 
-document.addEventListener("DOMContentLoaded", () => {
   const flightSummary = document.getElementById('flight-summary');
   const bookingForm = document.getElementById('booking-form');
 
-  // Load selected flight data from localStorage
+  // Load selected flight from localStorage
   const flightData = JSON.parse(localStorage.getItem('selectedFlight'));
-
   if (flightData) {
     flightSummary.innerHTML = `
       <h2 class="font-semibold text-lg mb-2">Flight Summary</h2>
       <p><strong>From:</strong> ${flightData.from}</p>
       <p><strong>To:</strong> ${flightData.to}</p>
-      <p><strong>Date:</strong> ${flightData.date || flightData.departure}</p>
-      <p><strong>Time:</strong> ${flightData.time || flightData.departure}</p>
-      <p><strong>Seats:</strong> ${flightData.seats || 1}</p>
-      <p><strong>Flight No:</strong> ${flightData.flightNo || flightData}</p>
+      <p><strong>Date:</strong> ${flightData.date}</p>
+      <p><strong>Time:</strong> ${flightData.time || '—'}</p>
+      <p><strong>Seats:</strong> ${flightData.seats || '—'}</p>
     `;
   } else {
     flightSummary.innerHTML = `<p class="text-gray-500">No flight selected yet.</p>`;
   }
 
-  // Handle form submission
+  // Booking form submission
   bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -34,20 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Save passenger info in localStorage
-    const passengerInfo = { passenger, email, phone };
-    localStorage.setItem('passengerInfo', JSON.stringify(passengerInfo));
-
-    // Optional: combine flight + passenger info for payment
-    const bookingDetails = {
-      flight: flightData,
-      passenger: passengerInfo
-    };
-    localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+    const bookingInfo = { passenger, email, phone };
+    localStorage.setItem('passengerInfo', JSON.stringify(bookingInfo));
 
     alert('Booking confirmed! ✈️');
-
-    // Redirect to payment page
     window.location.href = 'user-payment.html';
   });
+
 });

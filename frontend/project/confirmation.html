@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyWings | Booking Confirmation</title>
+  <title>SkyWings - Booking Confirmation</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+
   <style>
-    /* SkyWings Colors */
     :root {
       --sky-blue: #1a73e8;
       --sky-blue-light: #52a8ff;
@@ -16,68 +15,235 @@
       --gray: #e8eef5;
     }
 
-    /* Sky + Plane Animation */
-    .sky { position: absolute; top:0; left:0; width:100%; height:220px; overflow:hidden; z-index:0; }
-    .plane, .cloud { position:absolute; }
-    .plane { width:80px; animation: flyAcross 10s linear infinite; }
-    @keyframes flyAcross {
-      0% { transform: translateX(-100px); opacity:0; }
-      20% { opacity:1; }
-      80% { opacity:1; }
-      100% { transform: translateX(110vw); opacity:0; }
+    body {
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
     }
-    .cloud { background:white; border-radius:50%; opacity:0.8; width:120px; height:60px; animation: floatCloud 60s linear infinite; }
-    @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(100vw); } }
 
-    body { font-family:'Inter', sans-serif; background-color:var(--gray); min-height:100vh; flex-direction:column; align-items:center; padding:1.5rem; display:flex; }
-    .card { background:white; border-radius:1.5rem; padding:2rem; max-width:2xl; width:100%; box-shadow:0 10px 25px rgba(0,0,0,0.1); position:relative; z-index:10; }
-    .btn { transition:all 0.3s; }
-    .btn:hover { transform:translateY(-2px); box-shadow:0 6px 12px rgba(0,0,0,0.15); }
+    /* --- Top-left Logo --- */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      z-index: 20;
+      width: 65px;
+    }
+
+    /* --- White Card --- */
+    .card {
+      background: var(--white);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Cloud Animation --- */
+    .sky-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .cloud {
+      opacity: 0.85;
+      animation: cloudMove linear infinite;
+    }
+
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(130%); }
+      to   { transform: translateX(-150%); }
+    }
+
+    /* --- Animated Planes --- */
+    .plane {
+      animation: planeFly 14s linear infinite;
+    }
+
+    .plane-1 { animation-delay: 0s; transform: scale(1); }
+    .plane-2 { animation-delay: 5s; transform: scale(0.85); }
+    .plane-3 { animation-delay: 9s; transform: scale(0.7); }
+
+    @keyframes planeFly {
+      0%   { transform: translateX(-150px) translateY(0) scale(var(--scale)); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 15px;
+      color: var(--sky-blue);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--sky-blue);
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .info-box {
+      background: var(--gray);
+      padding: 12px 15px;
+      border-radius: 12px;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.05);
+    }
+
+    .label {
+      font-size: 12px;
+      color: #6c87c3;
+    }
+
+    .value {
+      font-size: 16px;
+      font-weight: 500;
+      color: #1b1f29;
+    }
+
+    #download-ticket {
+      width: 100%;
+      background: var(--sky-blue);
+      color: white;
+      padding: 14px;
+      font-size: 17px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 20px;
+    }
+
+    #download-ticket:hover {
+      background: #1558b0;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="card">
-    <h1 class="text-2xl font-bold text-[var(--sky-blue)] mb-4 text-center">Booking Confirmation</h1>
-
-    <nav class="space-x-4 text-sm mb-6 text-center">
-      <a href="search.html" class="hover:underline">Search</a>
-      <a href="results.html" class="hover:underline">Results</a>
-      <a href="booking.html" class="hover:underline">Booking</a>
-      <a href="user-payment.html" class="hover:underline">Payment</a>
-      <a href="confirmation.html" class="underline font-semibold">Confirmation</a>
-      <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
-    </nav>
-
-    <!-- Ticket Summary -->
-    <div id="ticket" class="bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-300 rounded-lg p-6 mb-6 relative">
-      <div class="absolute right-3 top-3 text-sm text-gray-500">#AERO<span id="ticket-id"></span></div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-2">Booking Details</h2>
-      <div id="ticket-details" class="space-y-1 text-gray-700"></div>
-      <p id="payment-method-display" class="font-semibold text-green-700 mt-2 text-lg"></p>
-    </div>
-
-    <div class="text-center space-y-3">
-      <button onclick="window.location.href='search.html'" class="btn w-full bg-[var(--sky-blue)] text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Book Another Flight
-      </button>
-      <button id="download-ticket" class="btn w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition">
-        Download Ticket PDF
-      </button>
-    </div>
-  </div>
+  <!-- Logo -->
+  <img src="../assets/logo.png" class="logo" alt="SkyWings Logo">
 
   <!-- Sky Animation -->
-  <div class="sky" aria-hidden="true">
-    <div class="cloud" style="top:20%; left:-150px;"></div>
-    <div class="cloud" style="top:50%; left:-200px;"></div>
-    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane" style="top:30%; animation-delay:0s;">
-    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane" style="top:60%; animation-delay:4s;">
+  <div class="sky-container">
+    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Clouds -->
+      <ellipse cx="1400" cy="60" rx="110" ry="28" fill="white" class="cloud cloud-large" />
+      <ellipse cx="1300" cy="120" rx="70" ry="20" fill="white" class="cloud cloud-medium" />
+      <ellipse cx="1600" cy="90" rx="50" ry="16" fill="white" class="cloud cloud-small" />
+
+      <!-- Planes -->
+      <g id="plane">
+        <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"></path>
+        <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"></rect>
+      </g>
+
+      <use href="#plane" class="plane plane-1" x="-200" y="40"/>
+      <use href="#plane" class="plane plane-2" x="-350" y="110"/>
+      <use href="#plane" class="plane plane-3" x="-500" y="20"/>
+    </svg>
   </div>
 
-  <!-- JS -->
-  <script src="confirmation.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Card -->
+  <div class="card">
 
+    <h1 class="title">Booking Confirmed ✔</h1>
+
+    <!-- Passenger Info -->
+    <div class="mb-6">
+      <div class="section-title">Passenger Information</div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">Full Name</div>
+          <div class="value" id="passenger-name"></div>
+        </div>
+        <div class="info-box">
+          <div class="label">Email</div>
+          <div class="value" id="passenger-email"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flight Info -->
+    <div class="mb-6">
+      <div class="section-title">Flight Details</div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">From</div>
+          <div class="value" id="from"></div>
+        </div>
+        <div class="info-box">
+          <div class="label">To</div>
+          <div class="value" id="to"></div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Date</div>
+          <div class="value" id="date"></div>
+        </div>
+        <div class="info-box">
+          <div class="label">Time</div>
+          <div class="value" id="time"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Info -->
+    <div class="mb-6">
+      <div class="section-title">Payment Details</div>
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="label">Payment Method</div>
+          <div class="value" id="payment-method"></div>
+        </div>
+        <div class="info-box">
+          <div class="label">Ticket ID</div>
+          <div class="value" id="ticket-id"></div>
+        </div>
+      </div>
+    </div>
+
+    <button id="download-ticket">Download Ticket (PDF)</button>
+  </div>
+
+  <script src="confirmation.js"></script>
 </body>
 </html>

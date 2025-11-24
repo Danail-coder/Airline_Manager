@@ -5,128 +5,136 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkyWings | Flight Results</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root {
-      --sky-blue: #0a5dd8;
-      --sky-light: #e8f2ff;
-      --sky-gold: #ffb400;
-      --sky-dark: #0a3a8c;
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
     }
 
     body {
-      background: linear-gradient(to bottom, var(--sky-light), #d6eaff);
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
       min-height: 100vh;
-      display: flex;
-      justify-content: center;
       padding: 2rem;
-      font-family: 'Helvetica', sans-serif;
+      font-family: 'Inter', sans-serif;
       overflow-x: hidden;
+      position: relative;
     }
 
+    /* --- Top-left Logo --- */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      z-index: 20;
+      width: 65px;
+    }
+
+    /* --- White Card --- */
     .card {
-      background: white;
+      background: var(--white);
       border-radius: 1.5rem;
       padding: 2rem;
       width: 100%;
-      max-width: 2xl;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
       position: relative;
       z-index: 10;
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
     }
 
-    nav a {
-      color: var(--sky-blue);
-      text-decoration: none;
-      font-weight: 500;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    nav a.underline {
-      text-decoration: underline;
-      font-weight: 600;
-    }
-
-    /* Sky animation */
-    .sky {
+    /* --- Cloud Animation --- */
+    .sky-container {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 220px;
-      overflow: visible;
+      height: 260px;
+      overflow: hidden;
       z-index: 0;
+      pointer-events: none;
     }
 
-    .clouds ellipse {
-      animation: moveClouds linear infinite;
+    .cloud {
+      opacity: 0.85;
+      animation: cloudMove linear infinite;
     }
 
-    .clouds ellipse:nth-child(1) { animation-duration: 80s; }
-    .clouds ellipse:nth-child(2) { animation-duration: 100s; }
-    .clouds ellipse:nth-child(3) { animation-duration: 70s; }
-    .clouds ellipse:nth-child(4) { animation-duration: 90s; }
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
 
-    @keyframes moveClouds {
-      from { transform: translateX(0); }
-      to { transform: translateX(-1400px); }
+    @keyframes cloudMove {
+      from { transform: translateX(130%); }
+      to   { transform: translateX(-150%); }
     }
 
+    /* --- Animated Planes --- */
     .plane {
-      animation: fly 20s linear infinite;
+      animation: planeFly 14s linear infinite;
     }
 
-    .plane-1 { animation-delay: 0s; }
-    .plane-2 { animation-delay: 4s; }
-    .plane-3 { animation-delay: 8s; }
+    .plane-1 { animation-delay: 0s; transform: scale(1); }
+    .plane-2 { animation-delay: 5s; transform: scale(0.85); }
+    .plane-3 { animation-delay: 9s; transform: scale(0.7); }
 
-    @keyframes fly {
-      0% { transform: translateX(-300px); }
-      100% { transform: translateX(1300px); }
+    @keyframes planeFly {
+      0%   { transform: translateX(-150px) translateY(0) scale(var(--scale)); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
     }
   </style>
 </head>
+
 <body>
 
+  <!-- Logo -->
+  <img src="../assets/logo.png" class="logo" alt="SkyWings Logo">
+
+  <!-- Sky Animation -->
+  <div class="sky-container">
+    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Clouds -->
+      <ellipse cx="1400" cy="60" rx="110" ry="28" fill="white" class="cloud cloud-large" />
+      <ellipse cx="1300" cy="120" rx="70" ry="20" fill="white" class="cloud cloud-medium" />
+      <ellipse cx="1600" cy="90" rx="50" ry="16" fill="white" class="cloud cloud-small" />
+
+      <!-- Planes -->
+      <g id="plane">
+        <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"></path>
+        <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"></rect>
+      </g>
+
+      <use href="#plane" class="plane plane-1" x="-200" y="40"/>
+      <use href="#plane" class="plane plane-2" x="-350" y="110"/>
+      <use href="#plane" class="plane plane-3" x="-500" y="20"/>
+    </svg>
+  </div>
+
+  <!-- MAIN CARD -->
   <div class="card">
-    <h1 class="text-2xl font-bold text-[var(--sky-blue)] mb-4 text-center">Passenger Information</h1>
-    
-    <nav class="flex justify-center space-x-4 text-sm mb-6">
-      <a href="search.html" class="hover:underline">Search</a>
-      <a href="results.html" class="underline font-semibold">Results</a>
-      <a href="booking.html" class="hover:underline">Booking</a>
-      <a href="user-payment.html" class="hover:underline">Payment</a>
-      <a href="confirmation.html" class="hover:underline">Confirmation</a>
-      <a href="login.html" class="text-red-500 hover:underline">Logout</a>
-    </nav>
+    <h1 class="text-3xl font-bold text-[var(--sky-blue)] mb-6 text-center">Available Flights</h1>
 
-    <!-- Sky Animation -->
-    <div class="sky" aria-hidden="true">
-      <svg viewBox="0 0 1200 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <g id="plane">
-            <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"/>
-            <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
-          </g>
-        </defs>
-
-        <g class="clouds" fill="#ffffff" opacity="0.9">
-          <ellipse cx="1200" cy="40" rx="90" ry="22" />
-          <ellipse cx="1000" cy="70" rx="60" ry="18" />
-          <ellipse cx="850" cy="35" rx="70" ry="20" />
-          <ellipse cx="600" cy="60" rx="110" ry="26" />
-        </g>
-
-        <use href="#plane" class="plane plane-1" x="-260" y="40" />
-        <use href="#plane" class="plane plane-2" x="-120" y="90" transform="scale(0.9)" />
-        <use href="#plane" class="plane plane-3" x="-640" y="20" transform="scale(0.75)" />
-      </svg>
+    <!-- Results Container -->
+    <div id="results-container" class="space-y-4">
+      <!-- JS will inject each flight result here -->
     </div>
 
-    <div id="flight-results" class="space-y-4 mt-4"></div>
-
+    <!-- Back Button -->
     <div class="mt-6 text-center">
-      <button onclick="window.location.href='search.html'" class="text-[var(--sky-blue)] hover:underline font-semibold">
-        ⬅ Back to Search
-      </button>
+      <a href="search.html" class="text-[var(--sky-blue)] hover:underline text-sm font-semibold">← Back to Search</a>
     </div>
   </div>
 

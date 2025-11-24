@@ -3,57 +3,191 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Starlink Manager | Payment</title>
+  <title>SkyWings | Payment</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    /* Takeoff overlay animation */
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
+      min-height: 100vh;
+      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* --- Top-left Logo --- */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 25px;
+      z-index: 20;
+      width: 65px;
+    }
+
+    /* --- White Card --- */
+    .card {
+      background: var(--white);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 700px;
+      margin: auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Cloud Animation --- */
+    .sky-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .cloud {
+      opacity: 0.85;
+      animation: cloudMove linear infinite;
+    }
+
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
+
+    @keyframes cloudMove {
+      from { transform: translateX(130%); }
+      to   { transform: translateX(-150%); }
+    }
+
+    /* --- Animated Planes --- */
+    .plane {
+      animation: planeFly 14s linear infinite;
+    }
+
+    .plane-1 { animation-delay: 0s; transform: scale(1); }
+    .plane-2 { animation-delay: 5s; transform: scale(0.85); }
+    .plane-3 { animation-delay: 9s; transform: scale(0.7); }
+
+    @keyframes planeFly {
+      0%   { transform: translateX(-150px) translateY(0) scale(var(--scale)); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
+    }
+
+    /* Inputs and selects */
+    select, input {
+      transition: 0.25s ease-in-out;
+    }
+    select:focus, input:focus {
+      transform: scale(1.02);
+      border-color: var(--sky-blue);
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
+      outline: none;
+    }
+
+    button {
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    /* Takeoff overlay */
     #takeoff-screen {
-      @apply fixed inset-0 bg-gradient-to-t from-sky-300 to-white flex flex-col items-center justify-center z-50 opacity-0 invisible transition-opacity duration-500;
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to top, #87ceeb, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
 
     #takeoff-screen.active {
-      @apply opacity-100 visible;
-    }
-
-    @keyframes takeoff {
-      0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
-      50% { transform: translateY(-50px) translateX(150px) rotate(10deg); opacity: 1; }
-      100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
+      opacity: 1;
+      visibility: visible;
     }
 
     .plane-icon {
       width: 120px;
       animation: takeoff 3.5s ease-in-out forwards;
     }
+
+    @keyframes takeoff {
+      0% { transform: translateY(0) translateX(0) rotate(0deg); }
+      50% { transform: translateY(-50px) translateX(150px) rotate(10deg); }
+      100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
+    }
+
+    .hidden { display: none; }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
 
-  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-2xl relative z-10">
-    <h1 class="text-2xl font-bold text-blue-700 mb-4 text-center">Passenger Information</h1>
-    <nav class="space-x-4 text-sm mb-6">
-      <a href="search.html" class="hover:underline">Search</a>
-      <a href="results.html" class="hover:underline">Results</a>
-      <a href="booking.html" class="hover:underline">Booking</a>
-      <a href="user-payment.html" class="underline font-semibold">Payment</a>
-      <a href="confirmation.html" class="hover:underline">Confirmation</a>
-      <a href="login.html" class="text-red-500 hover:underline mx-3">Logout</a>
+<body>
+
+  <!-- Logo -->
+  <img src="../assets/logo.png" class="logo" alt="SkyWings Logo">
+
+  <!-- Sky Animation -->
+  <div class="sky-container">
+    <svg viewBox="0 0 1440 260" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Clouds -->
+      <ellipse cx="1400" cy="60" rx="110" ry="28" fill="white" class="cloud cloud-large" />
+      <ellipse cx="1300" cy="120" rx="70" ry="20" fill="white" class="cloud cloud-medium" />
+      <ellipse cx="1600" cy="90" rx="50" ry="16" fill="white" class="cloud cloud-small" />
+
+      <!-- Planes -->
+      <g id="plane">
+        <path d="M0 12c4-3 30-12 54-6s46 22 56 26c8 3 22 10 36 8 10-1 28-7 42-12 14-6 30-10 46-8 16 2 34 10 50 14 18 5 38 6 58 0" fill="#fff" stroke="#ccdff9" stroke-width="1"></path>
+        <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"></rect>
+      </g>
+
+      <use href="#plane" class="plane plane-1" x="-200" y="40"/>
+      <use href="#plane" class="plane plane-2" x="-350" y="110"/>
+      <use href="#plane" class="plane plane-3" x="-500" y="20"/>
+    </svg>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <h1 class="text-3xl font-bold text-[var(--sky-blue)] mb-6 text-center">Passenger Payment</h1>
+
+    <nav class="text-center mb-6">
+      <a href="/frontend/project/login.html" class="text-red-500 hover:underline text-sm">Logout</a>
     </nav>
 
-    <!-- 🎟️ Ticket Summary -->
-    <div id="ticket" class="bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-300 rounded-lg p-6 mb-6 relative">
-      <div class="absolute right-3 top-3 text-sm text-gray-500">#AERO<span id="ticket-id"></span></div>
-      <h2 class="text-lg font-semibold text-gray-800 mb-2">Booking Summary</h2>
-      <div id="ticket-details" class="space-y-1 text-gray-700">
-        <!-- Flight & passenger info will load here -->
-      </div>
-    </div>
-
-    <!-- 💵 Payment Form -->
-    <form id="payment-form" class="space-y-4 relative">
+    <!-- Payment Method -->
+    <form id="payment-form" class="space-y-4">
       <label class="block">
-        <span class="font-medium text-gray-700">Payment Method</span>
-        <select id="payment-method" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200" required>
+        <span class="text-sm font-medium text-gray-700">Payment Method</span>
+        <select id="payment-method" required class="mt-1 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
           <option value="">Select Method</option>
           <option value="card">Credit/Debit Card</option>
           <option value="momo">Mobile Money</option>
@@ -61,17 +195,18 @@
         </select>
       </label>
 
+      <!-- Dynamic input fields -->
+      <div id="payment-fields" class="mt-4 space-y-4"></div>
+
       <p id="error-message" class="text-red-500 text-center hidden"></p>
 
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-        Pay Now
-      </button>
+      <button type="submit" class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-blue-700 transition-all">Pay Now</button>
     </form>
   </div>
 
-  <!-- ✈️ Persistent Takeoff Overlay -->
+  <!-- Takeoff overlay -->
   <div id="takeoff-screen">
-    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane-icon" alt="Plane">
     <p class="mt-6 text-lg font-semibold text-gray-700">Processing payment...</p>
   </div>
 

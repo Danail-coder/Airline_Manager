@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
       takeoffScreen.classList.remove("active");
       // Redirect based on role
       if (role === "admin") {
-        window.location.href = "../admin/dashboard.html";
+        window.location.href = "./admin/admin-dashboard.html";
       } else {
-        window.location.href = "client-dashboard.html"; // your client dashboard
+        window.location.href = "./search.html"; // your client dashboard
       }
     }, 3500);
   });
