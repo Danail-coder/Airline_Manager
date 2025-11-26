@@ -18,34 +18,105 @@
     body {
       background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
       min-height: 100vh;
-      padding: 2rem;
+      padding: 1rem;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
       position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+      body {
+        padding: 2rem;
+      }
     }
 
     /* --- Top-left Logo --- */
-    .logo {
-      position: absolute;
+    .logo-top {
+      position: fixed;
       top: 20px;
-      left: 25px;
-      z-index: 20;
-      width: 65px;
+      left: 20px;
+      z-index: 30;
+      width: 50px;
+      height: auto;
+    }
+
+    @media (min-width: 640px) {
+      .logo-top {
+        width: 65px;
+        left: 25px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .logo-top {
+        width: 75px;
+      }
+    }
+
+    /* Main container - centered */
+    .container-wrapper {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+      padding-top: 80px;
+    }
+
+    @media (min-width: 640px) {
+      .container-wrapper {
+        padding-top: 100px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container-wrapper {
+        padding-top: 0;
+      }
+    }
+
+    /* Logo inside card - centered */
+    .logo-center {
+      width: 80px;
+      height: auto;
+      display: block;
+      margin: 0 auto 1.5rem auto;
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @media (min-width: 640px) {
+      .logo-center {
+        width: 100px;
+        margin-bottom: 2rem;
+      }
     }
 
     /* --- White Card --- */
     .card {
       background: var(--white);
       border-radius: 1.5rem;
-      padding: 2rem;
+      padding: 1.5rem;
       width: 100%;
-      max-width: 700px;
-      margin: auto;
       box-shadow: 0 10px 25px rgba(0,0,0,0.12);
       position: relative;
       z-index: 10;
       animation: fadeIn 0.8s ease forwards;
       opacity: 0;
+    }
+
+    @media (min-width: 640px) {
+      .card {
+        padding: 2rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .card {
+        padding: 2.5rem;
+      }
     }
 
     @keyframes fadeIn {
@@ -63,6 +134,12 @@
       overflow: hidden;
       z-index: 0;
       pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      .sky-container {
+        height: 150px;
+      }
     }
 
     .cloud {
@@ -95,10 +172,25 @@
       100% { transform: translateX(130vw) translateY(-10px) scale(var(--scale)); opacity: 0; }
     }
 
+    /* Heading responsive */
+    .card h1 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .card h1 {
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+      }
+    }
+
     /* Inputs and selects */
     select, input {
       transition: 0.25s ease-in-out;
+      font-size: 1rem;
     }
+
     select:focus, input:focus {
       transform: scale(1.02);
       border-color: var(--sky-blue);
@@ -106,12 +198,40 @@
       outline: none;
     }
 
+    label span {
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 640px) {
+      label span {
+        font-size: 1rem;
+      }
+    }
+
     button {
       transition: all 0.3s ease;
+      font-size: 1rem;
     }
+
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    @media (min-width: 640px) {
+      button {
+        font-size: 1.0625rem;
+      }
+    }
+
+    nav a {
+      font-size: 0.875rem;
+    }
+
+    @media (min-width: 640px) {
+      nav a {
+        font-size: 1rem;
+      }
     }
 
     /* Takeoff overlay */
@@ -135,8 +255,14 @@
     }
 
     .plane-icon {
-      width: 120px;
+      width: 80px;
       animation: takeoff 3.5s ease-in-out forwards;
+    }
+
+    @media (min-width: 640px) {
+      .plane-icon {
+        width: 120px;
+      }
     }
 
     @keyframes takeoff {
@@ -145,14 +271,24 @@
       100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; }
     }
 
+    #takeoff-screen p {
+      font-size: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      #takeoff-screen p {
+        font-size: 1.125rem;
+      }
+    }
+
     .hidden { display: none; }
   </style>
 </head>
 
 <body>
 
-  <!-- Logo -->
-  <img src="../assets/logo.png" class="logo" alt="SkyWings Logo">
+  <!-- Logo Top-Left Corner -->
+  <img src="../assets/logo.png" class="logo-top" alt="SkyWings Logo">
 
   <!-- Sky Animation -->
   <div class="sky-container">
@@ -175,41 +311,143 @@
     </svg>
   </div>
 
-  <!-- Card -->
-  <div class="card">
-    <h1 class="text-3xl font-bold text-[var(--sky-blue)] mb-6 text-center">Passenger Payment</h1>
+  <!-- Container Wrapper - Centered -->
+  <div class="container-wrapper">
 
-    <nav class="text-center mb-6">
-      <a href="/frontend/project/login.html" class="text-red-500 hover:underline text-sm">Logout</a>
-    </nav>
+    <!-- Card -->
+    <div class="card">
 
-    <!-- Payment Method -->
-    <form id="payment-form" class="space-y-4">
-      <label class="block">
-        <span class="text-sm font-medium text-gray-700">Payment Method</span>
-        <select id="payment-method" required class="mt-1 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
-          <option value="">Select Method</option>
-          <option value="card">Credit/Debit Card</option>
-          <option value="momo">Mobile Money</option>
-          <option value="paypal">PayPal</option>
-        </select>
-      </label>
+      <!-- Logo Inside Card - Centered -->
+      <img src="../assets/logo.png" class="logo-center" alt="SkyWings Logo">
 
-      <!-- Dynamic input fields -->
-      <div id="payment-fields" class="mt-4 space-y-4"></div>
+      <h1 class="font-bold text-[var(--sky-blue)] mb-6 text-center">Passenger Payment</h1>
 
-      <p id="error-message" class="text-red-500 text-center hidden"></p>
+      <nav class="text-center mb-6">
+        <a href="login.html" class="text-red-500 hover:underline font-semibold">Logout</a>
+      </nav
 
-      <button type="submit" class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-blue-700 transition-all">Pay Now</button>
-    </form>
+      <!-- Payment Method -->
+      <form id="payment-form" class="space-y-4">
+        <label class="block">
+          <span class="font-medium text-gray-700">Payment Method</span>
+          <select id="payment-method" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+            <option value="">Select Method</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="momo">Mobile Money</option>
+            <option value="paypal">PayPal</option>
+          </select>
+        </label>
+
+        <!-- Dynamic input fields -->
+        <div id="payment-fields" class="mt-4 space-y-4"></div>
+
+        <p id="error-message" class="text-red-500 text-center hidden text-sm sm:text-base"></p>
+
+        <button type="submit" class="w-full bg-[var(--sky-blue)] text-white py-3 rounded-md hover:bg-blue-700 transition-all font-semibold">Pay Now</button>
+      </form>
+    </div>
+
   </div>
 
   <!-- Takeoff overlay -->
   <div id="takeoff-screen">
     <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" class="plane-icon" alt="Plane">
-    <p class="mt-6 text-lg font-semibold text-gray-700">Processing payment...</p>
+    <p class="mt-6 font-semibold text-gray-700">Processing payment...</p>
   </div>
 
-  <script src="../js/user-payment.js"></script>
+  <script>
+    // Dynamic payment fields based on method
+    const paymentMethodSelect = document.getElementById('payment-method');
+    const paymentFieldsDiv = document.getElementById('payment-fields');
+    const paymentForm = document.getElementById('payment-form');
+    const errorMessage = document.getElementById('error-message');
+    const takeoffScreen = document.getElementById('takeoff-screen');
+
+    paymentMethodSelect.addEventListener('change', function() {
+      const method = this.value;
+      paymentFieldsDiv.innerHTML = '';
+
+      if (method === 'card') {
+        paymentFieldsDiv.innerHTML = `
+          <label class="block">
+            <span class="text-sm sm:text-base font-medium text-gray-700">Card Number</span>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+          </label>
+          <div class="grid grid-cols-2 gap-4">
+            <label class="block">
+              <span class="text-sm sm:text-base font-medium text-gray-700">Expiry Date</span>
+              <input type="text" id="expiry" placeholder="MM/YY" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+            </label>
+            <label class="block">
+              <span class="text-sm sm:text-base font-medium text-gray-700">CVV</span>
+              <input type="text" id="cvv" placeholder="123" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+            </label>
+          </div>
+        `;
+      } else if (method === 'momo') {
+        paymentFieldsDiv.innerHTML = `
+          <label class="block">
+            <span class="text-sm sm:text-base font-medium text-gray-700">Mobile Money Number</span>
+            <input type="tel" id="momo-number" placeholder="024 123 4567" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+          </label>
+          <label class="block">
+            <span class="text-sm sm:text-base font-medium text-gray-700">Provider</span>
+            <select id="momo-provider" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+              <option value="">Select Provider</option>
+              <option value="mtn">MTN Mobile Money</option>
+              <option value="vodafone">Vodafone Cash</option>
+              <option value="airtel">AirtelTigo Money</option>
+            </select>
+          </label>
+        `;
+      } else if (method === 'paypal') {
+        paymentFieldsDiv.innerHTML = `
+          <label class="block">
+            <span class="text-sm sm:text-base font-medium text-gray-700">PayPal Email</span>
+            <input type="email" id="paypal-email" placeholder="your@email.com" required class="mt-2 w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500">
+          </label>
+        `;
+      }
+    });
+
+    paymentForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const method = paymentMethodSelect.value;
+
+      if (!method) {
+        errorMessage.textContent = 'Please select a payment method.';
+        errorMessage.classList.remove('hidden');
+        return;
+      }
+
+      // Basic validation
+      if (method === 'card') {
+        const cardNumber = document.getElementById('card-number').value;
+        if (cardNumber.length < 13) {
+          errorMessage.textContent = 'Please enter a valid card number.';
+          errorMessage.classList.remove('hidden');
+          return;
+        }
+      } else if (method === 'momo') {
+        const momoNumber = document.getElementById('momo-number').value;
+        if (momoNumber.length < 10) {
+          errorMessage.textContent = 'Please enter a valid mobile money number.';
+          errorMessage.classList.remove('hidden');
+          return;
+        }
+      }
+
+      errorMessage.classList.add('hidden');
+      takeoffScreen.classList.add('active');
+
+      // Simulate payment processing
+      setTimeout(() => {
+        alert('Payment successful! Redirecting to confirmation...');
+        takeoffScreen.classList.remove('active');
+        // window.location.href = 'confirmation.html';
+      }, 3500);
+    });
+  </script>
 </body>
 </html>

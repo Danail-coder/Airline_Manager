@@ -21,20 +21,46 @@ document.addEventListener('DOMContentLoaded', () => {
     flightSummary.innerHTML = `<p class="text-gray-500">No flight selected yet.</p>`;
   }
 
+  // Use shared PhoneInit helper when available
+  let iti = null;
+  const phoneInput = document.getElementById('phone');
+  if (phoneInput && window.PhoneInit && window.intlTelInput) {
+    iti = window.PhoneInit.init(phoneInput);
+  }
+
   // Booking form submission
   bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
-    const passenger = document.getElementById('passenger').value.trim();
+    const firstName = document.getElementById('first-name') ? document.getElementById('first-name').value.trim() : '';
+    const lastName = document.getElementById('last-name') ? document.getElementById('last-name').value.trim() : '';
     const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
+    const passenger = (firstName || lastName) ? `${firstName} ${lastName}`.trim() : '';
 
-    if (!passenger || !phone) {
-      alert('Please fill in all required fields.');
+    if (!passenger) {
+      alert('Please enter passenger name.');
       return;
     }
 
-    const bookingInfo = { passenger, email, phone };
+    // If intl-tel-input (via PhoneInit) is initialized, use it for validation/formatting
+    let finalPhone = '';
+    if (window.PhoneInit && iti) {
+      const formatted = window.PhoneInit.getE164(phoneInput);
+      if (!formatted) {
+        alert('Please enter a valid phone number for the selected country.');
+        return;
+      }
+      finalPhone = formatted;
+    } else {
+      // Fallback: use raw input value
+      const phoneNumber = document.getElementById('phone').value.trim();
+      if (!phoneNumber) {
+        alert('Please enter a phone number.');
+        return;
+      }
+      finalPhone = phoneNumber;
+    }
+
+    const bookingInfo = { passenger, email, phone: finalPhone };
     localStorage.setItem('passengerInfo', JSON.stringify(bookingInfo));
 
     alert('Booking confirmed! ✈️');
@@ -42,3 +68,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 });
+
+// Note: country-code select population removed in favor of intl-tel-input

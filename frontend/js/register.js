@@ -11,16 +11,18 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const fullname = document.getElementById("fullname").value.trim();
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
     const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    const phoneNumber = document.getElementById("phone").value.trim();
+    const countryCode = document.getElementById("country-code") ? document.getElementById("country-code").value : '';
     const password = document.getElementById("password").value.trim();
     const confirmPassword = document.getElementById("confirm-password").value.trim();
     const role = document.querySelector('input[name="role"]:checked')?.value;
     const termsAccepted = document.getElementById("terms").checked;
 
     // Validation
-    if (!fullname || !email || !phone || !password || !confirmPassword || !role) {
+    if (!firstName || !lastName || !email || !phoneNumber || !password || !confirmPassword || !role) {
       showError("Please fill in all fields and select a role.");
       return;
     }
@@ -47,7 +49,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Save new user
-    const newUser = { fullname, email, phone, password, role };
+    const fullname = firstName + ' ' + lastName;
+    const phone = (countryCode || '') + phoneNumber;
+    const newUser = { firstName, lastName, fullname, email, phone, password, role };
     users.push(newUser);
     localStorage.setItem("skywingsUsers", JSON.stringify(users));
 

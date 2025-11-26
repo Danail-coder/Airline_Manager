@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyWings | Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --sky-blue: #1a73e8;
+      --sky-blue-light: #52a8ff;
+      --deep-blue: #0d1a3a;
+      --white: #ffffff;
+      --gray: #e8eef5;
+    }
+
+    body {
+      background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
+      min-height: 100vh;
+      padding: 1rem;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Logo top-left */
+    .logo-top { position: fixed; top: 20px; left: 25px; z-index: 30; width: 65px; }
+
+    /* Sky container (decorative) */
+    .sky-container { position: absolute; top: 0; left: 0; width: 100%; height: 260px; overflow: hidden; z-index: 0; pointer-events: none; }
+    .cloud { opacity: 0.85; animation: cloudMove linear infinite; }
+    .cloud-small { animation-duration: 58s; }
+    .cloud-medium { animation-duration: 70s; }
+    .cloud-large { animation-duration: 90s; }
+    @keyframes cloudMove { from { transform: translateX(130%); } to { transform: translateX(-150%); } }
+
+    .card { background: var(--white); border-radius: 1rem; padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 10px 25px rgba(0,0,0,0.12); position: relative; z-index: 10; }
+
+    .logo-center { display:block; margin: 0 auto 1rem auto; width: 90px; }
+
+    #takeoff-screen { position: fixed; inset: 0; background: linear-gradient(to top, #87ceeb, #ffffff); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #takeoff-screen.active { opacity: 1; visibility: visible; }
+    .plane-icon { width: 100px; animation: takeoff 3.5s ease-in-out forwards; }
+    @keyframes takeoff { 0% { transform: translateY(0) translateX(0) rotate(0deg); } 50% { transform: translateY(-50px) translateX(150px) rotate(10deg); } 100% { transform: translateY(-300px) translateX(600px) rotate(25deg); opacity: 0; } }
+    .runway { width: 80%; height: 6px; background: repeating-linear-gradient(90deg, #333 0 20px, #666 20px 40px); border-radius: 4px; margin-top: 20px; animation: zoomRunway 3.5s ease-in-out forwards; }
+    @keyframes zoomRunway { from { transform: scaleX(1); opacity: 1; } to { transform: scaleX(2); opacity: 0; } }
+
+  </style>
+</head>
+<body>
+
+  <!-- Top-left logo (correct relative path from admin folder to assets) -->
+  <img src="../../assets/logo.png" class="logo-top" alt="SkyWings Logo">
+
+  <!-- Decorative sky -->
+  <div class="sky-container" aria-hidden="true">
+    <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice">
+      <g class="clouds" fill="#fff" opacity="0.92">
+        <ellipse cx="1200" cy="50" rx="95" ry="24" class="cloud cloud-large"/>
+        <ellipse cx="900" cy="80" rx="70" ry="20" class="cloud cloud-medium"/>
+        <ellipse cx="700" cy="40" rx="110" ry="28" class="cloud cloud-large"/>
+        <ellipse cx="450" cy="70" rx="80" ry="22" class="cloud cloud-small"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="card">
+    <img src="../../assets/logo.png" class="logo-center" alt="SkyWings Logo">
+    <h1 class="text-2xl font-semibold text-[var(--sky-blue)] text-center mb-4">Admin Sign In</h1>
+
+    <form id="admin-login-form" class="space-y-4">
+      <input type="email" id="email" placeholder="Admin Email" required class="w-full p-3 border rounded-md" />
+      <input type="password" id="password" placeholder="Password" required class="w-full p-3 border rounded-md" />
+
+      <button type="submit" class="w-full bg-[var(--deep-blue)] text-white py-3 rounded-md font-semibold">Sign In</button>
+    </form>
+
+    <p class="text-sm text-gray-600 mt-4 text-center">This login is for administrators only. For regular access, use the <a href="../login.html" class="text-[var(--sky-blue)] underline">public login</a>.</p>
+  </div>
+
+  <!-- Takeoff animation overlay -->
+  <div id="takeoff-screen">
+    <img src="https://cdn-icons-png.flaticon.com/512/181/181528.png" alt="Plane" class="plane-icon" />
+    <div class="runway"></div>
+    <p class="mt-6 font-semibold text-gray-700">Signing in... please wait</p>
+  </div>
+
+  <script>
+    document.getElementById('admin-login-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      // Simple client-side check for demo purposes; replace with real auth
+      const adminEmail = 'admin@skywings.com';
+      const adminPass = 'admin123';
+
+      if(email !== adminEmail || password !== adminPass){
+        alert('Invalid admin credentials.');
+        return;
+      }
+
+      // Show takeoff animation then redirect to admin dashboard
+      const takeoff = document.getElementById('takeoff-screen');
+      takeoff.classList.add('active');
+      setTimeout(() => {
+        takeoff.classList.remove('active');
+        window.location.href = 'admin-dashboard.html';
+      }, 3500);
+    });
+  </script>
+
+</body>
+</html>

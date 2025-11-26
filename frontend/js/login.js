@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Mock user data for demonstration (replace with real backend later)
   const mockUsers = [
-    { email: "admin@skywings.com", password: "admin123", role: "admin" },
     { email: "client@skywings.com", password: "client123", role: "client" }
   ];
 
@@ -38,12 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Simulate takeoff animation duration (~3.5s)
     setTimeout(() => {
       takeoffScreen.classList.remove("active");
-      // Redirect based on role
-      if (role === "admin") {
-        window.location.href = "./admin/admin-dashboard.html";
-      } else {
-        window.location.href = "./search.html"; // your client dashboard
-      }
+      // Redirect to search page for non-admin users
+      window.location.href = "./search.html";
     }, 3500);
   });
 
