@@ -1,31 +1,40 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const searchForm = document.getElementById("search-form");
+// search.js
+document.addEventListener('DOMContentLoaded', () => {
+  const searchForm = document.getElementById('search-form');
 
-  searchForm.addEventListener("submit", (e) => {
+  // Set minimum date to today
+  const dateInput = document.getElementById('date');
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.setAttribute('min', today);
+
+  searchForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const from = document.getElementById("from").value.trim();
-    const to = document.getElementById("to").value.trim();
-    const date = document.getElementById("date").value;
-    const flightClass = document.getElementById("class").value;
+    // Get form values
+    const from = document.getElementById('from').value.trim();
+    const to = document.getElementById('to').value.trim();
+    const date = document.getElementById('date').value;
+    const flightClass = document.getElementById('class').value;
 
+    // Validate inputs
     if (!from || !to || !date) {
-      alert("Please fill in all required fields.");
+      alert('Please fill in all required fields.');
       return;
     }
 
-    const flightData = {
-      from,
-      to,
-      date,
+    // Create search criteria object
+    const searchCriteria = {
+      from: from,
+      to: to,
+      date: date,
       class: flightClass,
-      ticketId: Math.floor(100000 + Math.random() * 900000)
+      timestamp: new Date().toISOString()
     };
 
-    // Save to localStorage for results page
-    localStorage.setItem("selectedFlight", JSON.stringify(flightData));
+    // Save search criteria to localStorage
+    localStorage.setItem('flightSearchCriteria', JSON.stringify(searchCriteria));
 
     // Redirect to results page
-    window.location.href = "results.html";
+    window.location.href = 'results.html';
   });
 });

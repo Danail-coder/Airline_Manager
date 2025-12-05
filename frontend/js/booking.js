@@ -1,72 +1,135 @@
-// -----------------------------
-// SkyWings Booking JS
-// -----------------------------
-document.addEventListener('DOMContentLoaded', () => {
+// booking.js
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("booking-form");
+  const errorMsg = document.getElementById("error-message");
+  const nextBtn = document.getElementById("next-btn");
+  const prevBtn = document.getElementById("prev-btn");
+  const step1 = document.getElementById("step-1");
+  const step2 = document.getElementById("step-2");
+  const dot1 = document.getElementById("dot-1");
+  const dot2 = document.getElementById("dot-2");
 
-  const flightSummary = document.getElementById('flight-summary');
-  const bookingForm = document.getElementById('booking-form');
+  let currentStep = 1;
 
-  // Load selected flight from localStorage
-  const flightData = JSON.parse(localStorage.getItem('selectedFlight'));
-  if (flightData) {
-    flightSummary.innerHTML = `
-      <h2 class="font-semibold text-lg mb-2">Flight Summary</h2>
-      <p><strong>From:</strong> ${flightData.from}</p>
-      <p><strong>To:</strong> ${flightData.to}</p>
-      <p><strong>Date:</strong> ${flightData.date}</p>
-      <p><strong>Time:</strong> ${flightData.time || '—'}</p>
-      <p><strong>Seats:</strong> ${flightData.seats || '—'}</p>
-    `;
-  } else {
-    flightSummary.innerHTML = `<p class="text-gray-500">No flight selected yet.</p>`;
+  // Check if flight is selected
+  const selectedFlightData = JSON.parse(localStorage.getItem('selectedFlight'));
+  if (!selectedFlightData) {
+    alert('No flight selected. Please search and select a flight first.');
+    window.location.href = 'search.html';
+    return;
   }
 
-  // Use shared PhoneInit helper when available
-  let iti = null;
-  const phoneInput = document.getElementById('phone');
-  if (phoneInput && window.PhoneInit && window.intlTelInput) {
-    iti = window.PhoneInit.init(phoneInput);
-  }
+  // Update flag image when country code changes
+  const countryCodeSelect = document.getElementById('country-code');
+  const selectedFlag = document.getElementById('selected-flag');
+  
+  countryCodeSelect.addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const flagCode = selectedOption.getAttribute('data-flag');
+    selectedFlag.src = `https://flagsapi.com/${flagCode}/flat/32.png`;
+  });
 
-  // Booking form submission
-  bookingForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const firstName = document.getElementById('first-name') ? document.getElementById('first-name').value.trim() : '';
-    const lastName = document.getElementById('last-name') ? document.getElementById('last-name').value.trim() : '';
-    const email = document.getElementById('email').value.trim();
-    const passenger = (firstName || lastName) ? `${firstName} ${lastName}`.trim() : '';
+  // Next button - go to step 2
+  nextBtn.addEventListener("click", () => {
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
 
-    if (!passenger) {
-      alert('Please enter passenger name.');
+    if (!firstName || !lastName || !email || !phone) {
+      errorMsg.textContent = "Please fill in all required fields before proceeding.";
+      errorMsg.classList.remove("hidden");
       return;
     }
 
-    // If intl-tel-input (via PhoneInit) is initialized, use it for validation/formatting
-    let finalPhone = '';
-    if (window.PhoneInit && iti) {
-      const formatted = window.PhoneInit.getE164(phoneInput);
-      if (!formatted) {
-        alert('Please enter a valid phone number for the selected country.');
-        return;
-      }
-      finalPhone = formatted;
-    } else {
-      // Fallback: use raw input value
-      const phoneNumber = document.getElementById('phone').value.trim();
-      if (!phoneNumber) {
-        alert('Please enter a phone number.');
-        return;
-      }
-      finalPhone = phoneNumber;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      errorMsg.textContent = "Please enter a valid email address.";
+      errorMsg.classList.remove("hidden");
+      return;
     }
 
-    const bookingInfo = { passenger, email, phone: finalPhone };
-    localStorage.setItem('passengerInfo', JSON.stringify(bookingInfo));
+    if (phone.length < 7) {
+      errorMsg.textContent = "Please enter a valid phone number.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
 
-    alert('Booking confirmed! ✈️');
-    window.location.href = 'user-payment.html';
+    errorMsg.classList.add("hidden");
+    step1.classList.remove("active");
+    step2.classList.add("active");
+    dot1.classList.remove("active");
+    dot2.classList.add("active");
+    currentStep = 2;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-});
+  // Previous button - go back to step 1
+  prevBtn.addEventListener("click", () => {
+    step2.classList.remove("active");
+    step1.classList.add("active");
+    dot2.classList.remove("active");
+    dot1.classList.add("active");
+    currentStep = 1;
+    errorMsg.classList.add("hidden");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
-// Note: country-code select population removed in favor of intl-tel-input
+  // Form submission
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const countryCode = document.getElementById("country-code").value;
+    const phone = document.getElementById("phone").value.trim();
+    const fullPhone = countryCode + phone;
+    const dob = document.getElementById("dob").value.trim();
+    const passport = document.getElementById("passport").value.trim();
+    const nationality = document.getElementById("nationality").value.trim();
+    const gender = document.getElementById("gender").value;
+    const seat = document.getElementById("seat").value;
+    const special = document.getElementById("special").value.trim();
+
+    // Basic validation for step 2
+    if (!gender) {
+      errorMsg.textContent = "Please select your gender.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+
+    // Create passenger information object
+    const passengerInfo = {
+      firstName,
+      lastName,
+      fullName: `${firstName} ${lastName}`,
+      email,
+      phone: fullPhone,
+      dob,
+      passport,
+      nationality,
+      gender,
+      seatPreference: seat,
+      specialRequests: special,
+      timestamp: new Date().toISOString()
+    };
+
+    // Combine flight data with passenger info for payment page
+    const completeBookingData = {
+      flight: selectedFlightData.flight,
+      searchCriteria: selectedFlightData.searchCriteria,
+      passenger: passengerInfo,
+      bookingDate: new Date().toISOString(),
+      bookingReference: 'BK' + Date.now().toString().slice(-8)
+    };
+
+    // Save complete booking data to localStorage
+    localStorage.setItem('completeBooking', JSON.stringify(completeBookingData));
+
+    errorMsg.classList.add("hidden");
+    
+    // Redirect to payment page
+    window.location.href = 'user-payment.html';
+  });
+});

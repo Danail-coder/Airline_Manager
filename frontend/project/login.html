@@ -77,21 +77,7 @@
       }
     }
 
-    /* Logo inside card - centered */
-    .logo-center {
-      width: 80px;
-      height: auto;
-      display: block;
-      margin: 0 auto 1.5rem auto;
-      animation: fadeIn 0.8s ease forwards;
-    }
 
-    @media (min-width: 640px) {
-      .logo-center {
-        width: 100px;
-        margin-bottom: 2rem;
-      }
-    }
 
     /* --- White Card --- */
     .card {
@@ -337,10 +323,7 @@
     <!-- Login Card -->
     <div class="card">
 
-      <!-- Logo Inside Card - Centered -->
-      <img src="../assets/logo.png" class="logo-center" alt="SkyWings Logo">
-
-      <h1 class="font-bold text-[var(--sky-blue)] mb-6 text-center">Sign In</h1>
+      <h1 class="font-bold text-[var(--sky-blue)] mb-2 text-center">Sign In</h1>
 
       <form id="login-form" class="space-y-4">
         <input type="email" id="email" placeholder="Email" required
@@ -383,6 +366,7 @@
     <p class="mt-6 font-semibold text-gray-700">Taking off... please wait</p>
   </div>
 
+  <script src="../js/modal.js"></script>
   <script>
     // Placeholder for login.js functionality
     document.getElementById('login-form').addEventListener('submit', function(e) {
@@ -393,10 +377,12 @@
       
       // Simulate login process and redirect to main search for non-admin users
       setTimeout(() => {
-        alert('Login successful!');
         document.getElementById('takeoff-screen').classList.remove('active');
-        // Redirect to search page (user/client)
-        window.location.href = './search.html';
+        showSuccess('Login Successful', 'Redirecting to dashboard...');
+        setTimeout(() => {
+          // Redirect to search page (user/client)
+          window.location.href = './search.html';
+        }, 1500);
       }, 3500);
     });
   </script>

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SkyWings | Booking</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
     :root {
@@ -16,7 +15,6 @@
       --gray: #e8eef5;
     }
 
-    /* Page background */
     body {
       background: linear-gradient(to bottom, var(--sky-blue-light), #d6eaff);
       min-height: 100vh;
@@ -29,14 +27,12 @@
       justify-content: center;
     }
 
-    /* Responsive padding */
     @media (min-width: 640px) {
       body {
         padding: 2rem;
       }
     }
 
-    /* Clouds + planes SVG container */
     .sky {
       position: absolute;
       top: 0;
@@ -57,7 +53,6 @@
       animation: moveClouds linear infinite;
     }
 
-    /* Cloud speeds */
     .clouds ellipse:nth-child(1) { animation-duration: 85s; }
     .clouds ellipse:nth-child(2) { animation-duration: 110s; }
     .clouds ellipse:nth-child(3) { animation-duration: 95s; }
@@ -68,7 +63,6 @@
       to { transform: translateX(-1500px); }
     }
 
-    /* Plane animations */
     .plane { animation: fly 20s linear infinite; }
     @keyframes fly {
       from { transform: translateX(-200px); opacity: 1; }
@@ -79,7 +73,6 @@
     .plane-2 { animation-delay: 3s; transform: scale(0.9); }
     .plane-3 { animation-delay: 6s; transform: scale(0.75); }
 
-    /* Main container - centered */
     .container-wrapper {
       width: 100%;
       max-width: 680px;
@@ -101,23 +94,8 @@
       }
     }
 
-    /* Logo above form - centered */
-    .logo-center {
-      width: 80px;
-      height: auto;
-      display: block;
-      margin: 0 auto 2rem auto;
-      animation: fadeIn 0.8s ease forwards;
-    }
 
-    @media (min-width: 640px) {
-      .logo-center {
-        width: 100px;
-        margin-bottom: 2.5rem;
-      }
-    }
 
-    /* Main card */
     .card {
       background: var(--white);
       border-radius: 1.5rem;
@@ -145,7 +123,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Heading responsive */
     .card h1 {
       font-size: 1.5rem;
       line-height: 2rem;
@@ -158,7 +135,6 @@
       }
     }
 
-    /* Inputs */
     input, select {
       transition: 0.25s ease-in-out;
       font-size: 1rem;
@@ -171,7 +147,118 @@
       outline: none;
     }
 
-    /* Labels responsive */
+    /* Custom dropdown styles */
+    .custom-dropdown {
+      position: relative;
+      width: 120px;
+    }
+
+    .dropdown-selected {
+      width: 100%;
+      height: 48px;
+      padding: 12px 8px 12px 44px;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .dropdown-selected:hover {
+      border-color: var(--sky-blue);
+    }
+
+    .dropdown-selected.active {
+      border-color: var(--sky-blue);
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.3);
+    }
+
+    .dropdown-flag {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 15px;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .dropdown-arrow {
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid #333;
+      transition: transform 0.2s;
+      margin-left: 4px;
+    }
+
+    .dropdown-selected.active .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-list {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      max-height: 0;
+      background: white;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      overflow: hidden;
+      overflow-y: auto;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .dropdown-list.active {
+      max-height: 240px;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .dropdown-item {
+      padding: 10px 12px 10px 44px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      position: relative;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-item:hover {
+      background: #f3f4f6;
+    }
+
+    .dropdown-item.selected {
+      background: #e0f2fe;
+      color: var(--sky-blue);
+      font-weight: 600;
+    }
+
+    .dropdown-item-flag {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 15px;
+      object-fit: cover;
+    }
+
     label {
       font-size: 0.875rem;
     }
@@ -198,7 +285,6 @@
       }
     }
 
-    /* Logo top-left corner */
     .logo-top {
       position: fixed;
       top: 20px;
@@ -221,7 +307,6 @@
       }
     }
 
-    /* Form spacing */
     .form-group {
       margin-bottom: 1rem;
     }
@@ -232,7 +317,6 @@
       }
     }
 
-    /* Step transitions */
     .form-step {
       display: none;
     }
@@ -247,7 +331,6 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
-    /* Progress indicator */
     .progress-indicator {
       display: flex;
       justify-content: center;
@@ -272,10 +355,8 @@
 
 <body>
 
-  <!-- Logo Top-Left Corner -->
   <img src="../assets/logo.png" class="logo-top" alt="SkyWings Logo">
 
-  <!-- Sky Animation -->
   <div class="sky">
     <svg viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice">
       <defs>
@@ -285,44 +366,28 @@
           <rect x="10" y="8" width="36" height="8" rx="3" fill="#ffb400"/>
         </g>
       </defs>
-
       <g class="clouds" fill="#fff" opacity="0.92">
         <ellipse cx="1200" cy="50" rx="95" ry="24"/>
         <ellipse cx="900" cy="80" rx="70" ry="20"/>
         <ellipse cx="700" cy="40" rx="110" ry="28"/>
         <ellipse cx="450" cy="70" rx="80" ry="22"/>
       </g>
-
       <use href="#plane" class="plane plane-1" x="-200" y="50"/>
       <use href="#plane" class="plane plane-2" x="-400" y="100"/>
       <use href="#plane" class="plane plane-3" x="-600" y="30"/>
     </svg>
   </div>
 
-  <!-- Container Wrapper - Centered -->
   <div class="container-wrapper">
-
-    <!-- Booking Card -->
     <div class="card">
+      <h1 class="font-bold text-[var(--sky-blue)] mb-6">Passenger Information</h1>
 
-      <!-- Logo Above Form Title - Inside Card -->
-      <img src="../assets/logo.png" class="logo-center" alt="SkyWings Logo">
-
-      <h1 class="font-bold text-[var(--sky-blue)] mb-6 text-center">Passenger Information</h1>
-
-      <nav class="text-center mb-6">
-        <a href="login.html" class="text-red-500 hover:underline font-semibold">Logout</a>
-      </nav
-
-      <!-- Progress Indicator -->
       <div class="progress-indicator">
         <div class="progress-dot active" id="dot-1"></div>
         <div class="progress-dot" id="dot-2"></div>
       </div>
 
       <form id="booking-form">
-
-        <!-- STEP 1 -->
         <div class="form-step active" id="step-1">
           <div class="form-group grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -343,60 +408,16 @@
           <div class="form-group">
             <label class="block font-medium mb-2">Phone Number</label>
             <div class="flex gap-2">
-              <select id="country-code" required class="w-32 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                <option value="+1" data-flag="🇺🇸">🇺🇸 +1</option>
-                <option value="+233" data-flag="🇬🇭">🇬🇭 +233</option>
-                <option value="+44" data-flag="🇬🇧">🇬🇧 +44</option>
-                <option value="+91" data-flag="🇮🇳">🇮🇳 +91</option>
-                <option value="+234" data-flag="🇳🇬">🇳🇬 +234</option>
-                <option value="+27" data-flag="🇿🇦">🇿🇦 +27</option>
-                <option value="+254" data-flag="🇰🇪">🇰🇪 +254</option>
-                <option value="+256" data-flag="🇺🇬">🇺🇬 +256</option>
-                <option value="+255" data-flag="🇹🇿">🇹🇿 +255</option>
-                <option value="+86" data-flag="🇨🇳">🇨🇳 +86</option>
-                <option value="+81" data-flag="🇯🇵">🇯🇵 +81</option>
-                <option value="+49" data-flag="🇩🇪">🇩🇪 +49</option>
-                <option value="+33" data-flag="🇫🇷">🇫🇷 +33</option>
-                <option value="+61" data-flag="🇦🇺">🇦🇺 +61</option>
-                <option value="+971" data-flag="🇦🇪">🇦🇪 +971</option>
-                <option value="+966" data-flag="🇸🇦">🇸🇦 +966</option>
-                <option value="+20" data-flag="🇪🇬">🇪🇬 +20</option>
-                <option value="+212" data-flag="🇲🇦">🇲🇦 +212</option>
-                <option value="+213" data-flag="🇩🇿">🇩🇿 +213</option>
-                <option value="+82" data-flag="🇰🇷">🇰🇷 +82</option>
-                <option value="+65" data-flag="🇸🇬">🇸🇬 +65</option>
-                <option value="+60" data-flag="🇲🇾">🇲🇾 +60</option>
-                <option value="+66" data-flag="🇹🇭">🇹🇭 +66</option>
-                <option value="+63" data-flag="🇵🇭">🇵🇭 +63</option>
-                <option value="+62" data-flag="🇮🇩">🇮🇩 +62</option>
-                <option value="+84" data-flag="🇻🇳">🇻🇳 +84</option>
-                <option value="+52" data-flag="🇲🇽">🇲🇽 +52</option>
-                <option value="+55" data-flag="🇧🇷">🇧🇷 +55</option>
-                <option value="+54" data-flag="🇦🇷">🇦🇷 +54</option>
-                <option value="+56" data-flag="🇨🇱">🇨🇱 +56</option>
-                <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
-                <option value="+34" data-flag="🇪🇸">🇪🇸 +34</option>
-                <option value="+39" data-flag="🇮🇹">🇮🇹 +39</option>
-                <option value="+31" data-flag="🇳🇱">🇳🇱 +31</option>
-                <option value="+46" data-flag="🇸🇪">🇸🇪 +46</option>
-                <option value="+47" data-flag="🇳🇴">🇳🇴 +47</option>
-                <option value="+45" data-flag="🇩🇰">🇩🇰 +45</option>
-                <option value="+358" data-flag="🇫🇮">🇫🇮 +358</option>
-                <option value="+41" data-flag="🇨🇭">🇨🇭 +41</option>
-                <option value="+43" data-flag="🇦🇹">🇦🇹 +43</option>
-                <option value="+351" data-flag="🇵🇹">🇵🇹 +351</option>
-                <option value="+30" data-flag="🇬🇷">🇬🇷 +30</option>
-                <option value="+90" data-flag="🇹🇷">🇹🇷 +90</option>
-                <option value="+7" data-flag="🇷🇺">🇷🇺 +7</option>
-                <option value="+48" data-flag="🇵🇱">🇵🇱 +48</option>
-                <option value="+420" data-flag="🇨🇿">🇨🇿 +420</option>
-                <option value="+36" data-flag="🇭🇺">🇭🇺 +36</option>
-                <option value="+40" data-flag="🇷🇴">🇷🇴 +40</option>
-                <option value="+64" data-flag="🇳🇿">🇳🇿 +64</option>
-                <option value="+353" data-flag="🇮🇪">🇮🇪 +353</option>
-                <option value="+32" data-flag="🇧🇪">🇧🇪 +32</option>
-                <option value="+972" data-flag="🇮🇱">🇮🇱 +972</option>
-              </select>
+              <div class="custom-dropdown">
+                <img id="dropdown-flag" src="https://flagsapi.com/US/flat/32.png" alt="Flag" class="dropdown-flag">
+                <div class="dropdown-selected" id="dropdown-selected">
+                  <span id="selected-code">+1</span>
+                  <div class="dropdown-arrow"></div>
+                </div>
+                <div class="dropdown-list" id="dropdown-list">
+                  <!-- Options will be inserted here by JavaScript -->
+                </div>
+              </div>
               <input type="tel" id="phone" placeholder="555 000 0000" required class="flex-1 p-3 border rounded-lg">
             </div>
           </div>
@@ -411,7 +432,6 @@
           </button>
         </div>
 
-        <!-- STEP 2 -->
         <div class="form-step" id="step-2">
           <div class="form-group">
             <label class="block font-medium mb-2">Passport / ID Number</label>
@@ -458,115 +478,217 @@
         </div>
 
         <p id="error-message" class="text-red-500 mt-4 text-center hidden"></p>
-
       </form>
     </div>
-
   </div>
 
-  <!-- intl-tel-input (flags + formatting) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+  <script src="../js/modal.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("booking-form");
-      const errorMsg = document.getElementById("error-message");
-      const nextBtn = document.getElementById("next-btn");
-      const prevBtn = document.getElementById("prev-btn");
-      const step1 = document.getElementById("step-1");
-      const step2 = document.getElementById("step-2");
-      const dot1 = document.getElementById("dot-1");
-      const dot2 = document.getElementById("dot-2");
+   document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("booking-form");
+  const errorMsg = document.getElementById("error-message");
+  const nextBtn = document.getElementById("next-btn");
+  const prevBtn = document.getElementById("prev-btn");
+  const step1 = document.getElementById("step-1");
+  const step2 = document.getElementById("step-2");
+  const dot1 = document.getElementById("dot-1");
+  const dot2 = document.getElementById("dot-2");
 
-      let currentStep = 1;
+  let currentStep = 1;
 
-      // Next button - go to step 2
-      nextBtn.addEventListener("click", () => {
-        const firstName = document.getElementById("first-name").value.trim();
-        const lastName = document.getElementById("last-name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const phone = document.getElementById("phone").value.trim();
-        const dob = document.getElementById("dob").value.trim();
+  // Check if flight is selected
+  const selectedFlightData = JSON.parse(localStorage.getItem('selectedFlight'));
+  if (!selectedFlightData) {
+    showError('No Flight Selected', 'Please search and select a flight first.', [{
+      label: 'Back to Search',
+      type: 'secondary',
+      callback: () => {
+        window.location.href = 'search.html';
+      }
+    }]);
+    return;
+  }
 
-        if (!firstName || !lastName || !email || !phone) {
-          errorMsg.textContent = "Please fill in all required fields before proceeding.";
-          errorMsg.classList.remove("hidden");
-          return;
-        }
+  // Country codes dropdown functionality
+  const countries = [
+    { code: "+1", flag: "US" }, { code: "+233", flag: "GH" }, { code: "+44", flag: "GB" },
+    { code: "+91", flag: "IN" }, { code: "+234", flag: "NG" }, { code: "+27", flag: "ZA" },
+    { code: "+254", flag: "KE" }, { code: "+256", flag: "UG" }, { code: "+255", flag: "TZ" },
+    { code: "+86", flag: "CN" }, { code: "+81", flag: "JP" }, { code: "+49", flag: "DE" },
+    { code: "+33", flag: "FR" }, { code: "+61", flag: "AU" }, { code: "+971", flag: "AE" },
+    { code: "+966", flag: "SA" }, { code: "+20", flag: "EG" }, { code: "+212", flag: "MA" },
+    { code: "+213", flag: "DZ" }, { code: "+82", flag: "KR" }, { code: "+65", flag: "SG" },
+    { code: "+60", flag: "MY" }, { code: "+66", flag: "TH" }, { code: "+63", flag: "PH" },
+    { code: "+62", flag: "ID" }, { code: "+84", flag: "VN" }, { code: "+52", flag: "MX" },
+    { code: "+55", flag: "BR" }, { code: "+54", flag: "AR" }, { code: "+56", flag: "CL" },
+    { code: "+57", flag: "CO" }, { code: "+34", flag: "ES" }, { code: "+39", flag: "IT" },
+    { code: "+31", flag: "NL" }, { code: "+46", flag: "SE" }, { code: "+47", flag: "NO" },
+    { code: "+45", flag: "DK" }, { code: "+358", flag: "FI" }, { code: "+41", flag: "CH" },
+    { code: "+43", flag: "AT" }, { code: "+351", flag: "PT" }, { code: "+30", flag: "GR" },
+    { code: "+90", flag: "TR" }, { code: "+7", flag: "RU" }, { code: "+48", flag: "PL" },
+    { code: "+420", flag: "CZ" }, { code: "+36", flag: "HU" }, { code: "+40", flag: "RO" },
+    { code: "+64", flag: "NZ" }, { code: "+353", flag: "IE" }, { code: "+32", flag: "BE" },
+    { code: "+972", flag: "IL" }
+  ];
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          errorMsg.textContent = "Please enter a valid email address.";
-          errorMsg.classList.remove("hidden");
-          return;
-        }
+  let selectedCountry = countries[0];
+  const dropdownSelected = document.getElementById("dropdown-selected");
+  const dropdownList = document.getElementById("dropdown-list");
+  const dropdownFlag = document.getElementById("dropdown-flag");
+  const selectedCodeSpan = document.getElementById("selected-code");
 
-        errorMsg.classList.add("hidden");
-        step1.classList.remove("active");
-        step2.classList.add("active");
-        dot1.classList.remove("active");
-        dot2.classList.add("active");
-        currentStep = 2;
-      });
-
-      // Previous button - go back to step 1
-      prevBtn.addEventListener("click", () => {
-        step2.classList.remove("active");
-        step1.classList.add("active");
-        dot2.classList.remove("active");
-        dot1.classList.add("active");
-        currentStep = 1;
-        errorMsg.classList.add("hidden");
-      });
-
-      // Form submission
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const firstName = document.getElementById("first-name").value.trim();
-        const lastName = document.getElementById("last-name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const countryCode = document.getElementById("country-code").value;
-        const phone = document.getElementById("phone").value.trim();
-        const fullPhone = countryCode + phone;
-        const dob = document.getElementById("dob").value.trim();
-        const passport = document.getElementById("passport").value.trim();
-        const nationality = document.getElementById("nationality").value.trim();
-        const gender = document.getElementById("gender").value;
-        const seat = document.getElementById("seat").value;
-        const special = document.getElementById("special").value.trim();
-
-        // Basic validation for step 2
-        if (!gender) {
-          errorMsg.textContent = "Please select your gender.";
-          errorMsg.classList.remove("hidden");
-          return;
-        }
-
-        // Save booking data to localStorage
-        const bookingData = {
-          firstName,
-          lastName,
-          email,
-          phone: fullPhone,
-          dob,
-          passport,
-          nationality,
-          gender,
-          seat,
-          special,
-          timestamp: new Date().toISOString()
-        };
-
-        localStorage.setItem('currentBooking', JSON.stringify(bookingData));
-
-        errorMsg.classList.add("hidden");
-        
-        // Redirect to payment page
-        alert('Passenger information saved! Redirecting to payment...');
-        // window.location.href = 'payment.html';
-      });
+  // Populate dropdown
+  countries.forEach(country => {
+    const item = document.createElement("div");
+    item.className = "dropdown-item";
+    if (country.code === selectedCountry.code) item.classList.add("selected");
+    item.innerHTML = `<img src="https://flagsapi.com/${country.flag}/flat/32.png" class="dropdown-item-flag">${country.code}`;
+    
+    item.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectedCountry = country;
+      dropdownFlag.src = `https://flagsapi.com/${country.flag}/flat/32.png`;
+      selectedCodeSpan.textContent = country.code;
+      
+      document.querySelectorAll(".dropdown-item").forEach(i => i.classList.remove("selected"));
+      item.classList.add("selected");
+      
+      dropdownSelected.classList.remove("active");
+      dropdownList.classList.remove("active");
     });
+    
+    dropdownList.appendChild(item);
+  });
+
+  // Toggle dropdown
+  dropdownSelected.addEventListener("click", (e) => {
+    e.stopPropagation();
+    dropdownSelected.classList.toggle("active");
+    dropdownList.classList.toggle("active");
+  });
+
+  // Close when clicking outside
+  document.addEventListener("click", () => {
+    dropdownSelected.classList.remove("active");
+    dropdownList.classList.remove("active");
+  });
+
+  // Prevent dropdown from closing when clicking inside the list
+  dropdownList.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+
+  // Next button - go to step 2
+  nextBtn.addEventListener("click", () => {
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+
+    if (!firstName || !lastName || !email || !phone) {
+      errorMsg.textContent = "Please fill in all required fields before proceeding.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      errorMsg.textContent = "Please enter a valid email address.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+
+    if (phone.length < 7) {
+      errorMsg.textContent = "Please enter a valid phone number.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+
+    errorMsg.classList.add("hidden");
+    step1.classList.remove("active");
+    step2.classList.add("active");
+    dot1.classList.remove("active");
+    dot2.classList.add("active");
+    currentStep = 2;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Previous button - go back to step 1
+  prevBtn.addEventListener("click", () => {
+    step2.classList.remove("active");
+    step1.classList.add("active");
+    dot2.classList.remove("active");
+    dot1.classList.add("active");
+    currentStep = 1;
+    errorMsg.classList.add("hidden");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Form submission
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById("first-name").value.trim();
+    const lastName = document.getElementById("last-name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const fullPhone = selectedCountry.code + phone;
+    const dob = document.getElementById("dob").value.trim();
+    const passport = document.getElementById("passport").value.trim();
+    const nationality = document.getElementById("nationality").value.trim();
+    const gender = document.getElementById("gender").value;
+    const seat = document.getElementById("seat").value;
+    const special = document.getElementById("special").value.trim();
+
+    // Basic validation for step 2
+    if (!gender) {
+      errorMsg.textContent = "Please select your gender.";
+      errorMsg.classList.remove("hidden");
+      return;
+    }
+
+    // Create passenger information object
+    const passengerInfo = {
+      firstName,
+      lastName,
+      fullName: `${firstName} ${lastName}`,
+      email,
+      phone: fullPhone,
+      dob,
+      passport,
+      nationality,
+      gender,
+      seatPreference: seat,
+      specialRequests: special,
+      timestamp: new Date().toISOString()
+    };
+
+    // Combine flight data with passenger info for payment page
+    const completeBookingData = {
+      flight: selectedFlightData.flight,
+      searchCriteria: selectedFlightData.searchCriteria,
+      passenger: passengerInfo,
+      bookingDate: new Date().toISOString(),
+      bookingReference: 'BK' + Date.now().toString().slice(-8)
+    };
+
+    // Save complete booking data to localStorage
+    localStorage.setItem('completeBooking', JSON.stringify(completeBookingData));
+
+    errorMsg.classList.add("hidden");
+    
+    // Show success message with callback to redirect
+    showSuccess('Booking Submitted Successfully', `Booking Reference: ${completeBookingData.bookingReference}\nPassenger: ${passengerInfo.fullName}\nPhone: ${fullPhone}\n\nYour booking data has been saved.`, [{
+      label: 'Continue to Payment',
+      type: 'primary',
+      callback: () => {
+        window.location.href = 'user-payment.html';
+      }
+    }]);
+    
+    console.log('Complete Booking Data:', completeBookingData);
+  });
+});
   </script>
 
 </body>
