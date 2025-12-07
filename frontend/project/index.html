@@ -5,118 +5,82 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>SkyWings | Welcome</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<style>
-  :root {
-    --sky-blue: #1a73e8;
-    --sky-blue-light: #52a8ff;
-    --deep-blue: #0d1a3a;
-    --white: #ffffff;
-    --gray: #e8eef5;
-    --sky-gold: #ffb400;
-  }
+<link rel="stylesheet" href="style/index.css" />
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(to bottom, var(--sky-blue-light), var(--sky-blue));
-    overflow: hidden;
-  }
-
-  /* Fade-in animation */
-  .fade-in { animation: fadeIn 1s ease-in-out; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Plane animations */
-  .plane {
-    position: absolute;
-    width: 80px;
-    animation: flyAcross 12s linear infinite;
-  }
-  @keyframes flyAcross {
-    0% { transform: translateX(-100px) translateY(0); opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translateX(110vw) translateY(20px); opacity: 0; }
-  }
-
-  .plane-landing {
-    position: absolute;
-    bottom: 0;
-    left: 30%;
-    width: 120px;
-    transform: rotate(-5deg);
-    animation: land 8s ease-in-out infinite;
-  }
-  @keyframes land {
-    0% { transform: translateY(150px) rotate(-5deg); opacity: 0; }
-    30% { opacity: 1; }
-    60% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(150px) rotate(-5deg); opacity: 0; }
-  }
-
-  /* Floating clouds */
-  .cloud {
-    position: absolute;
-    background: var(--white);
-    border-radius: 50%;
-    opacity: 0.9;
-    animation: floatCloud 50s linear infinite;
-  }
-  .cloud::before, .cloud::after {
-    content: "";
-    position: absolute;
-    background: var(--white);
-    border-radius: 50%;
-  }
-  .cloud::before { width: 60%; height: 60%; top: -20%; left: 10%; }
-  .cloud::after { width: 70%; height: 70%; top: -10%; right: 10%; }
-  @keyframes floatCloud { from { transform: translateX(-200px); } to { transform: translateX(100vw); } }
-
-  /* Main text animation */
-  h1 { animation: fadeIn 1s ease-in-out; }
-  button {
-    transition: all 0.3s ease;
-  }
-  button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  }
-
-  /* Responsive adjustments */
-  @media (max-width: 640px) {
-    h1 { font-size: 3xl; }
-    .plane, .plane-landing { width: 60px; }
-  }
-</style>
 </head>
-<body class="flex flex-col items-center justify-center h-screen text-center">
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <img src="../assets/logo.png" alt="SkyWings Logo" class="navbar-logo">
+    <button onclick="window.location.href='login.html'" class="nav-login-btn">
+      Login
+    </button>
+  </nav>
 
-  <!-- Animated sky background -->
-  <div class="absolute inset-0 overflow-hidden">
-    <div class="cloud" style="width:120px;height:60px;top:15%;left:-100px;animation-duration:60s;"></div>
-    <div class="cloud" style="width:180px;height:80px;top:40%;left:-150px;animation-duration:70s;"></div>
-    <div class="cloud" style="width:150px;height:70px;top:65%;left:-200px;animation-duration:90s;"></div>
+  <!-- Animated background -->
+  <div class="animated-bg"></div>
 
-    <img src="../assets/logo.png" class="plane" style="top:20%;animation-delay:0s;">
-    <img src="../assets/logo.png" class="plane" style="top:50%;animation-delay:4s;">
-    <img src="../assets/logo.png" class="plane-landing" />
+  <!-- Particles -->
+  <div class="particle" style="width:4px;height:4px;top:20%;left:10%;animation-delay:0s;animation-duration:15s;"></div>
+  <div class="particle" style="width:6px;height:6px;top:60%;left:80%;animation-delay:2s;animation-duration:20s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:80%;left:30%;animation-delay:4s;animation-duration:18s;"></div>
+  <div class="particle" style="width:5px;height:5px;top:40%;left:60%;animation-delay:6s;animation-duration:22s;"></div>
+  <div class="particle" style="width:4px;height:4px;top:10%;left:90%;animation-delay:3s;animation-duration:16s;"></div>
+  <div class="particle" style="width:7px;height:7px;top:70%;left:15%;animation-delay:5s;animation-duration:19s;"></div>
+
+  <!-- Clouds -->
+  <div class="cloud cloud-1" style="width:150px;height:70px;top:15%;left:-200px;"></div>
+  <div class="cloud cloud-2" style="width:200px;height:90px;top:50%;left:-250px;opacity:0.6;"></div>
+  <div class="cloud cloud-3" style="width:180px;height:80px;top:75%;left:-220px;opacity:0.5;"></div>
+
+  <!-- Flying plane -->
+  <svg class="plane" style="top:25%;" viewBox="0 0 512 512" fill="white">
+    <path d="M256 0c-25.3 0-47.2 14.7-57.6 36c-7-2.6-14.5-4-22.4-4c-35.3 0-64 28.7-64 64V261.5C97.4 271 86.3 281.6 76 291.3C45.2 317.1 14.4 355.8 3.7 401.5c-2.3 9.7 6.4 18.5 16.1 16.3C64.1 410.1 101.6 403.3 137 391c-2.3 6.4-3.5 13.4-3.5 20.7c0 33.3 20.4 61.9 49.4 73.9c-.9 4.6-1.4 9.3-1.4 14.1c0 39.8 32.2 72 72 72s72-32.2 72-72c0-4.8-.5-9.5-1.4-14.1c29-12 49.4-40.6 49.4-73.9c0-7.3-1.2-14.3-3.5-20.7c35.4 12.3 72.9 19.1 116.1 26.8c9.7 2.3 18.4-6.6 16.1-16.3c-10.7-45.7-41.5-84.4-72.3-110.2c-10.3-9.7-21.4-20.3-36-29.8V96c0-35.3-28.7-64-64-64c-7.9 0-15.4 1.4-22.4 4C303.2 14.7 281.3 0 256 0z"/>
+  </svg>
+
+  <!-- Main content -->
+  <div class="main-content relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-12">
+    <main class="hero-section max-w-4xl w-full text-center">
+      <!-- Title -->
+      <h1 class="title text-6xl font-bold mb-6 mt-24">
+        Welcome to SkyWings
+      </h1>
+      
+      <!-- Subtitle -->
+      <p class="text-[#0d1a3a] text-xl mb-8 max-w-2xl mx-auto drop-shadow-lg">
+        Experience the future of aviation management. Seamlessly handle flights, bookings, and passengers with our cutting-edge platform.
+      </p>
+
+      <!-- CTA Button -->
+      <button onclick="window.location.href='login.html'" class="cta-button mb-16">
+        <span class="relative z-10">Get Started ✈️</span>
+      </button>
+
+      <!-- Feature cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        <div class="feature-card">
+          <div class="text-4xl mb-3">✈️</div>
+          <h3 class="font-semibold text-lg mb-2 text-[#667eea]">Flight Management</h3>
+          <p class="text-sm">Real-time tracking and scheduling</p>
+        </div>
+        <div class="feature-card feature-card-special">
+          <div class="text-4xl mb-3">📊</div>
+          <h3 class="font-semibold text-lg mb-2 text-white">Smart Analytics</h3>
+          <p class="text-sm">Data-driven insights at your fingertips</p>
+        </div>
+        <div class="feature-card">
+          <div class="text-4xl mb-3">🌍</div>
+          <h3 class="font-semibold text-lg mb-2 text-[#667eea]">Global Network</h3>
+          <p class="text-sm">Connect with destinations worldwide</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white text-sm mt-12 opacity-75">
+      © 2025 SkyWings | Fly Smart, Fly Safe
+    </footer>
   </div>
 
-  <!-- Landing Text -->
-  <main class="relative z-10 fade-in">
-    <img src="../assets/logo.png" alt="SkyWings Logo" class="mx-auto w-28 mb-4">
-    <h1 class="text-5xl font-bold text-[var(--deep-blue)] mb-4 drop-shadow-lg">Welcome to SkyWings</h1>
-    <p class="text-lg text-gray-100 mb-8">Manage flights, bookings, and passengers with ease.</p>
-    <button onclick="window.location.href='login.html'" class="bg-[var(--sky-blue)] hover:bg-[var(--deep-blue)] text-white text-lg px-6 py-3 rounded-full shadow-lg transition-all transform">
-      Get Started ✈️
-    </button>
-  </main>
-
-  <!-- Footer -->
-  <footer class="absolute bottom-4 text-gray-100 text-sm">
-    © 2025 SkyWings | Fly Smart, Fly Safe
-  </footer>
 </body>
 </html>
