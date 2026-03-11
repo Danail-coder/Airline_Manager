@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SkyWings | Aircraft Maintenance</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../style/index.css" />
+
   <style>
     :root {
       --sky-blue: #1a73e8;
@@ -54,6 +56,27 @@
   </style>
 </head>
 <body class="font-sans flex">
+
+  <!-- Animated background -->
+  <div class="animated-bg"></div>
+
+  <!-- Particles -->
+  <div class="particle" style="width:4px;height:4px;top:20%;left:10%;animation-delay:0s;animation-duration:15s;"></div>
+  <div class="particle" style="width:6px;height:6px;top:60%;left:80%;animation-delay:2s;animation-duration:20s;"></div>
+  <div class="particle" style="width:3px;height:3px;top:80%;left:30%;animation-delay:4s;animation-duration:18s;"></div>
+  <div class="particle" style="width:5px;height:5px;top:40%;left:60%;animation-delay:6s;animation-duration:22s;"></div>
+  <div class="particle" style="width:4px;height:4px;top:10%;left:90%;animation-delay:3s;animation-duration:16s;"></div>
+  <div class="particle" style="width:7px;height:7px;top:70%;left:15%;animation-delay:5s;animation-duration:19s;"></div>
+
+  <!-- Clouds -->
+  <div class="cloud cloud-1" style="width:150px;height:70px;top:15%;left:-200px;"></div>
+  <div class="cloud cloud-2" style="width:200px;height:90px;top:50%;left:-250px;opacity:0.6;"></div>
+  <div class="cloud cloud-3" style="width:180px;height:80px;top:75%;left:-220px;opacity:0.5;"></div>
+
+  <!-- Flying plane -->
+  <svg class="plane" style="top:25%;" viewBox="0 0 512 512" fill="white">
+    <path d="M256 0c-25.3 0-47.2 14.7-57.6 36c-7-2.6-14.5-4-22.4-4c-35.3 0-64 28.7-64 64V261.5C97.4 271 86.3 281.6 76 291.3C45.2 317.1 14.4 355.8 3.7 401.5c-2.3 9.7 6.4 18.5 16.1 16.3C64.1 410.1 101.6 403.3 137 391c-2.3 6.4-3.5 13.4-3.5 20.7c0 33.3 20.4 61.9 49.4 73.9c-.9 4.6-1.4 9.3-1.4 14.1c0 39.8 32.2 72 72 72s72-32.2 72-72c0-4.8-.5-9.5-1.4-14.1c29-12 49.4-40.6 49.4-73.9c0-7.3-1.2-14.3-3.5-20.7c35.4 12.3 72.9 19.1 116.1 26.8c9.7 2.3 18.4-6.6 16.1-16.3c-10.7-45.7-41.5-84.4-72.3-110.2c-10.3-9.7-21.4-20.3-36-29.8V96c0-35.3-28.7-64-64-64c-7.9 0-15.4 1.4-22.4 4C303.2 14.7 281.3 0 256 0z"/>
+  </svg>
 
   <!-- Logo Top-Left -->
   <img src="../../assets/logo.png" class="logo-top" alt="SkyWings Logo">
